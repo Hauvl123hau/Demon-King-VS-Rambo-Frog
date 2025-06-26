@@ -13,8 +13,15 @@ public class GunController : MonoBehaviour
     float nextShootTime = 0f;
     public int currentClip, maxClip = 7, currentAmmo, maxAmmo = 30;
     public float reloadDelay = 1.5f; // Thời gian thay đạn
+    public GameObject[] ammo_ui;
 
     bool isReloading = false;
+
+    void Start()
+    {
+        // Khởi tạo UI đạn
+        UpdateAmmoUI();
+    }
 
     // Update is called once per frame
     void Update()
@@ -38,6 +45,7 @@ public class GunController : MonoBehaviour
             gunAnimator.SetTrigger("shoot");
             Destroy(bulletIns, 2f);
             currentClip--;
+            UpdateAmmoUI(); // Cập nhật UI sau khi bắn
 
             // Tự động thay đạn khi hết băng
             if (currentClip == 0 && currentAmmo > 0 && !isReloading)
@@ -76,6 +84,7 @@ public class GunController : MonoBehaviour
         {
             StartCoroutine(ReloadCoroutine());
         }
+        UpdateAmmoUI(); // Cập nhật UI sau khi thêm đạn
     }
     public void FinishReload()
     {
@@ -84,6 +93,24 @@ public class GunController : MonoBehaviour
         currentClip += reloadAmount;
         currentAmmo -= reloadAmount;
         isReloading = false;
+        UpdateAmmoUI(); // Cập nhật UI sau khi thay đạn
     }
 
+    // Phương thức cập nhật UI hiển thị đạn
+    void UpdateAmmoUI()
+    {
+        // Kiểm tra nếu ammo_ui đã được gán
+        if (ammo_ui == null || ammo_ui.Length == 0)
+            return;
+
+        // Cập nhật hiển thị các viên đạn trong băng
+        for (int i = 0; i < ammo_ui.Length; i++)
+        {
+            if (ammo_ui[i] != null)
+            {
+                // Hiển thị viên đạn nếu vị trí này có đạn, ẩn nếu không
+                ammo_ui[i].SetActive(i < currentClip);
+            }
+        }
+    }
 }

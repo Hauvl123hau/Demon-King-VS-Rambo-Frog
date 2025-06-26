@@ -5227,6 +5227,9 @@ MonoBehaviour:
   currentAmmo: 10
   maxAmmo: 30
   reloadDelay: 1.5
+  ammo_ui:
+  - {fileID: 0}
+  - {fileID: 0}
 --- !u!1 &4350942240236233165
 GameObject:
   m_ObjectHideFlags: 0
