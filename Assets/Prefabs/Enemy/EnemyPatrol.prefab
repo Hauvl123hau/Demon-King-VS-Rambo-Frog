@@ -127,6 +127,14 @@ PrefabInstance:
       propertyPath: m_Name
       value: GroundEnemy
       objectReference: {fileID: 0}
+    - target: {fileID: 3852090598069932668, guid: d330e225ddc630446bcf49f7ec00d1da, type: 3}
+      propertyPath: m_SortingLayer
+      value: 5
+      objectReference: {fileID: 0}
+    - target: {fileID: 3852090598069932668, guid: d330e225ddc630446bcf49f7ec00d1da, type: 3}
+      propertyPath: m_SortingLayerID
+      value: 504004951
+      objectReference: {fileID: 0}
     - target: {fileID: 4652038705221424698, guid: d330e225ddc630446bcf49f7ec00d1da, type: 3}
       propertyPath: m_LocalPosition.x
       value: -1.420169
