@@ -1,16 +1,19 @@
 fileFormatVersion: 2
-guid: 004bb51b2188e5e4699774f01136dcab
+guid: 1c36ad7efe85b9f45a0cf1a851335c3b
 TextureImporter:
   internalIDToNameTable:
   - first:
-      213: 2769113135504068992
-    second: Nem_0
+      213: 815424164945274260
+    second: IDLE_0
   - first:
-      213: 1417384104343546204
-    second: Nem_1
+      213: -270785710348516584
+    second: IDLE_1
   - first:
-      213: -5427741042609141901
-    second: Nem_2
+      213: 8443794771774750484
+    second: IDLE_2
+  - first:
+      213: 1777182293076053196
+    second: IDLE_3
   externalObjects: {}
   serializedVersion: 13
   mipmaps:
@@ -43,7 +46,7 @@ TextureImporter:
   maxTextureSize: 2048
   textureSettings:
     serializedVersion: 2
-    filterMode: 1
+    filterMode: 0
     aniso: 1
     mipBias: 0
     wrapU: 1
@@ -57,7 +60,7 @@ TextureImporter:
   spriteMeshType: 1
   alignment: 0
   spritePivot: {x: 0.5, y: 0.5}
-  spritePixelsToUnits: 100
+  spritePixelsToUnits: 32
   spriteBorder: {x: 0, y: 0, z: 0, w: 0}
   spriteGenerateFallbackPhysicsShape: 1
   alphaUsage: 1
@@ -106,13 +109,13 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: Nem_0
+      name: IDLE_0
       rect:
         serializedVersion: 2
         x: 0
-        y: 88
-        width: 310
-        height: 534
+        y: 4
+        width: 82
+        height: 61
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -121,20 +124,20 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: 0819690b9bddd6620800000000000000
-      internalID: 2769113135504068992
+      spriteID: 49525dc25f7f05b00800000000000000
+      internalID: 815424164945274260
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Nem_1
+      name: IDLE_1
       rect:
         serializedVersion: 2
-        x: 107
-        y: 319
-        width: 917
-        height: 700
+        x: 89
+        y: 1
+        width: 65
+        height: 67
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -143,20 +146,20 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: c59aea1555f8ba310800000000000000
-      internalID: 1417384104343546204
+      spriteID: 813cc64c4d9fd3cf0800000000000000
+      internalID: -270785710348516584
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Nem_2
+      name: IDLE_2
       rect:
         serializedVersion: 2
-        x: 271
-        y: 48
-        width: 551
-        height: 576
+        x: 168
+        y: 5
+        width: 70
+        height: 62
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -165,8 +168,30 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: 3774976774acca4b0800000000000000
-      internalID: -5427741042609141901
+      spriteID: 41f3fe79b926e2570800000000000000
+      internalID: 8443794771774750484
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: IDLE_3
+      rect:
+        serializedVersion: 2
+        x: 249
+        y: 5
+        width: 69
+        height: 61
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: ccc89ef21e1d9a810800000000000000
+      internalID: 1777182293076053196
       vertices: []
       indices: 
       edges: []
@@ -185,9 +210,10 @@ TextureImporter:
     spriteCustomMetadata:
       entries: []
     nameFileIdTable:
-      Nem_0: 2769113135504068992
-      Nem_1: 1417384104343546204
-      Nem_2: -5427741042609141901
+      IDLE_0: 815424164945274260
+      IDLE_1: -270785710348516584
+      IDLE_2: 8443794771774750484
+      IDLE_3: 1777182293076053196
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

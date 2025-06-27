@@ -63,7 +63,7 @@ Transform:
   m_Children:
   - {fileID: 5785548935626068365}
   - {fileID: 484599008632397976}
-  - {fileID: 3091896149080646730}
+  - {fileID: 1094970030013754219}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &2386213188687070282
@@ -80,10 +80,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   leftEdge: {fileID: 5785548935626068365}
   rightEdge: {fileID: 484599008632397976}
-  enemy: {fileID: 3091896149080646730}
+  enemy: {fileID: 0}
   speed: 1
   idleDuration: 1
-  anim: {fileID: 2531328778227370990}
+  anim: {fileID: 0}
 --- !u!1 &6724791264375502895
 GameObject:
   m_ObjectHideFlags: 0
@@ -115,7 +115,7 @@ Transform:
   m_Children: []
   m_Father: {fileID: 1122419240291761887}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!1001 &7667312002084041328
+--- !u!1001 &5745821262341242193
 PrefabInstance:
   m_ObjectHideFlags: 0
   serializedVersion: 2
@@ -125,15 +125,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 393877295856038908, guid: d330e225ddc630446bcf49f7ec00d1da, type: 3}
       propertyPath: m_Name
-      value: GroundEnemy
-      objectReference: {fileID: 0}
-    - target: {fileID: 3852090598069932668, guid: d330e225ddc630446bcf49f7ec00d1da, type: 3}
-      propertyPath: m_SortingLayer
-      value: 5
-      objectReference: {fileID: 0}
-    - target: {fileID: 3852090598069932668, guid: d330e225ddc630446bcf49f7ec00d1da, type: 3}
-      propertyPath: m_SortingLayerID
-      value: 504004951
+      value: Skeletion
       objectReference: {fileID: 0}
     - target: {fileID: 4652038705221424698, guid: d330e225ddc630446bcf49f7ec00d1da, type: 3}
       propertyPath: m_LocalPosition.x
@@ -180,13 +172,8 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: d330e225ddc630446bcf49f7ec00d1da, type: 3}
---- !u!95 &2531328778227370990 stripped
-Animator:
-  m_CorrespondingSourceObject: {fileID: 5280142600223439262, guid: d330e225ddc630446bcf49f7ec00d1da, type: 3}
-  m_PrefabInstance: {fileID: 7667312002084041328}
-  m_PrefabAsset: {fileID: 0}
---- !u!4 &3091896149080646730 stripped
+--- !u!4 &1094970030013754219 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 4652038705221424698, guid: d330e225ddc630446bcf49f7ec00d1da, type: 3}
-  m_PrefabInstance: {fileID: 7667312002084041328}
+  m_PrefabInstance: {fileID: 5745821262341242193}
   m_PrefabAsset: {fileID: 0}
