@@ -10,9 +10,10 @@ GameObject:
   m_Component:
   - component: {fileID: 2512939041869159854}
   - component: {fileID: 166269000583707064}
-  - component: {fileID: 3491871531398367781}
+  - component: {fileID: 4885698407233510433}
   - component: {fileID: 4743381873535381397}
-  - component: {fileID: 3028150819863764455}
+  - component: {fileID: 2978207988461285559}
+  - component: {fileID: 735168715067060201}
   m_Layer: 0
   m_Name: Bat
   m_TagString: Untagged
@@ -90,8 +91,57 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
---- !u!61 &3491871531398367781
-BoxCollider2D:
+--- !u!50 &4885698407233510433
+Rigidbody2D:
+  serializedVersion: 5
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 90891143681824297}
+  m_BodyType: 1
+  m_Simulated: 1
+  m_UseFullKinematicContacts: 0
+  m_UseAutoMass: 0
+  m_Mass: 1
+  m_LinearDamping: 0
+  m_AngularDamping: 0.05
+  m_GravityScale: 1
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_Interpolate: 0
+  m_SleepingMode: 1
+  m_CollisionDetection: 0
+  m_Constraints: 0
+--- !u!95 &4743381873535381397
+Animator:
+  serializedVersion: 7
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 90891143681824297}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: 91a974db7ced2a747b30da8353aa0ee1, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_StabilizeFeet: 0
+  m_AnimatePhysics: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorStateOnDisable: 0
+  m_WriteDefaultValuesOnDisable: 0
+--- !u!60 &2978207988461285559
+PolygonCollider2D:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
@@ -120,7 +170,7 @@ BoxCollider2D:
   m_CallbackLayers:
     serializedVersion: 2
     m_Bits: 4294967295
-  m_IsTrigger: 1
+  m_IsTrigger: 0
   m_UsedByEffector: 0
   m_CompositeOperation: 0
   m_CompositeOrder: 0
@@ -134,31 +184,24 @@ BoxCollider2D:
     drawMode: 0
     adaptiveTiling: 0
   m_AutoTiling: 0
-  m_Size: {x: 0.36, y: 0.18}
-  m_EdgeRadius: 0
---- !u!95 &4743381873535381397
-Animator:
-  serializedVersion: 7
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 90891143681824297}
-  m_Enabled: 1
-  m_Avatar: {fileID: 0}
-  m_Controller: {fileID: 9100000, guid: 91a974db7ced2a747b30da8353aa0ee1, type: 2}
-  m_CullingMode: 0
-  m_UpdateMode: 0
-  m_ApplyRootMotion: 0
-  m_LinearVelocityBlending: 0
-  m_StabilizeFeet: 0
-  m_AnimatePhysics: 0
-  m_WarningMessage: 
-  m_HasTransformHierarchy: 1
-  m_AllowConstantClipSamplingOptimization: 1
-  m_KeepAnimatorStateOnDisable: 0
-  m_WriteDefaultValuesOnDisable: 0
---- !u!114 &3028150819863764455
+  m_Points:
+    m_Paths:
+    - - {x: 0.15212525, y: 0.22629379}
+      - {x: -0.11283725, y: 0.23616481}
+      - {x: -0.30859604, y: 0.18736318}
+      - {x: -0.45537746, y: 0.051609773}
+      - {x: -0.41773978, y: -0.008869873}
+      - {x: -0.31350684, y: -0.0012918301}
+      - {x: -0.14723565, y: -0.043164082}
+      - {x: -0.10160993, y: -0.22500001}
+      - {x: 0.054829165, y: -0.2357534}
+      - {x: 0.12635316, y: -0.089593075}
+      - {x: 0.25177658, y: -0.029920483}
+      - {x: 0.46075365, y: -0.00698651}
+      - {x: 0.4338702, y: 0.10349313}
+      - {x: 0.29811594, y: 0.18198644}
+  m_UseDelaunayMesh: 0
+--- !u!114 &735168715067060201
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -167,9 +210,9 @@ MonoBehaviour:
   m_GameObject: {fileID: 90891143681824297}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 8a3424e5ca84a5a4491b5d3208d2e9af, type: 3}
+  m_Script: {fileID: 11500000, guid: 3504cf32e897ced4a9b86a606e3b7181, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  startingHealth: 3
-  iFramesDuration: 0
-  numberOfFlashes: 0
+  speed: 2
+  chase: 0
+  startPosition: {fileID: 0}
