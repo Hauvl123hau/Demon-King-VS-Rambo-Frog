@@ -6,7 +6,7 @@ AnimationClip:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: dragon_knight_attack_1_Clip
+  m_Name: prep_dash
   serializedVersion: 7
   m_Legacy: 0
   m_Compressed: 0
@@ -21,19 +21,13 @@ AnimationClip:
   - serializedVersion: 2
     curve:
     - time: 0
-      value: {fileID: 7233424214102956340, guid: 6b437d29545e5ae44aede551d15c6caf, type: 3}
+      value: {fileID: 4031134441821909580, guid: 1dca66067e404ad47867fe14da6302d0, type: 3}
     - time: 0.1
-      value: {fileID: 7817170641576639768, guid: 6b437d29545e5ae44aede551d15c6caf, type: 3}
+      value: {fileID: 8752370603911561366, guid: 1dca66067e404ad47867fe14da6302d0, type: 3}
     - time: 0.2
-      value: {fileID: -6953260978874477923, guid: 6b437d29545e5ae44aede551d15c6caf, type: 3}
-    - time: 0.3
-      value: {fileID: 6982397941346116692, guid: 6b437d29545e5ae44aede551d15c6caf, type: 3}
-    - time: 0.4
-      value: {fileID: -5456652749290744913, guid: 6b437d29545e5ae44aede551d15c6caf, type: 3}
-    - time: 0.5
-      value: {fileID: 5623575341962427377, guid: 6b437d29545e5ae44aede551d15c6caf, type: 3}
-    - time: 0.59000003
-      value: {fileID: 5623575341962427377, guid: 6b437d29545e5ae44aede551d15c6caf, type: 3}
+      value: {fileID: -3363642499092088081, guid: 1dca66067e404ad47867fe14da6302d0, type: 3}
+    - time: 0.29000002
+      value: {fileID: -3363642499092088081, guid: 1dca66067e404ad47867fe14da6302d0, type: 3}
     attribute: m_Sprite
     path: 
     classID: 212
@@ -52,7 +46,7 @@ AnimationClip:
     m_AdditiveReferencePoseClip: {fileID: 0}
     m_AdditiveReferencePoseTime: 0
     m_StartTime: 0
-    m_StopTime: 0.6
+    m_StopTime: 0.3
     m_OrientationOffsetY: 0
     m_Level: 0
     m_CycleOffset: 0

@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 
-public class FlyEnemy : MonoBehaviour
+public class FlyEnemy : MonoBehaviour, IDamageDealer
 {
     [SerializeField] private float speed;
     [Header("Patrol Settings")]
@@ -10,7 +10,8 @@ public class FlyEnemy : MonoBehaviour
     [Header("Attack Settings")]
     [SerializeField] private float attackRange = 3f; // Tầm đánh
     [SerializeField] private float attackSpeed = 8f; // Tốc độ lao vào khi tấn công
-    [SerializeField] private float attackCooldown = 2f; // Thời gian chờ giữa các lần tấn công
+    [SerializeField] private float attackCooldown = 3f; // Thời gian chờ giữa các lần tấn công
+    [SerializeField] private int damage = 1;
     
     public bool chase = false;
     private GameObject player;
@@ -189,5 +190,16 @@ public class FlyEnemy : MonoBehaviour
         // Vẽ tầm tấn công
         Gizmos.color = Color.red;
         Gizmos.DrawWireSphere(transform.position, attackRange);
+    }
+
+    // Implementation of IDamageDealer interface
+    public int GetDamage()
+    {
+        return damage;
+    }
+    
+    public EnemyType GetEnemyType()
+    {
+        return EnemyType.Flying;
     }
 }

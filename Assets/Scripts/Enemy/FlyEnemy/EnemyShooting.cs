@@ -12,7 +12,7 @@ public class EnemyShooting : MonoBehaviour
     [SerializeField] private float attackCooldown = 2f; // Thời gian chờ giữa các lần bắn
     [SerializeField] private GameObject fireball; // Prefab cầu lửa
     [SerializeField] private Transform firePoint; // Điểm bắn
-    
+    [SerializeField] private int damage = 2; // Sát thương của cầu lửa
     private GameObject player;
     private Animator anim;
     

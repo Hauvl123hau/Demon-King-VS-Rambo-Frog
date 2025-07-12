@@ -6,7 +6,7 @@ AnimationClip:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: dragon_knight_jump_attack_1_Clip
+  m_Name: attack_2
   serializedVersion: 7
   m_Legacy: 0
   m_Compressed: 0
@@ -21,19 +21,19 @@ AnimationClip:
   - serializedVersion: 2
     curve:
     - time: 0
-      value: {fileID: 4483650762199892192, guid: 94f161e9e436c3e44a00246c8351834d, type: 3}
+      value: {fileID: -5563035670327758821, guid: 42a3866b5be20264491b329c2c652b5f, type: 3}
     - time: 0.1
-      value: {fileID: 6687145250558015775, guid: 94f161e9e436c3e44a00246c8351834d, type: 3}
+      value: {fileID: 3484141156986904499, guid: 42a3866b5be20264491b329c2c652b5f, type: 3}
     - time: 0.2
-      value: {fileID: 3505708830332203663, guid: 94f161e9e436c3e44a00246c8351834d, type: 3}
+      value: {fileID: -985867745366659483, guid: 42a3866b5be20264491b329c2c652b5f, type: 3}
     - time: 0.3
-      value: {fileID: 4378666531079669804, guid: 94f161e9e436c3e44a00246c8351834d, type: 3}
+      value: {fileID: 1345523783258788186, guid: 42a3866b5be20264491b329c2c652b5f, type: 3}
     - time: 0.4
-      value: {fileID: 110104024674477296, guid: 94f161e9e436c3e44a00246c8351834d, type: 3}
+      value: {fileID: 2352262942757679921, guid: 42a3866b5be20264491b329c2c652b5f, type: 3}
     - time: 0.5
-      value: {fileID: 5550241780612058035, guid: 94f161e9e436c3e44a00246c8351834d, type: 3}
+      value: {fileID: -3538931586094454490, guid: 42a3866b5be20264491b329c2c652b5f, type: 3}
     - time: 0.59000003
-      value: {fileID: 5550241780612058035, guid: 94f161e9e436c3e44a00246c8351834d, type: 3}
+      value: {fileID: -3538931586094454490, guid: 42a3866b5be20264491b329c2c652b5f, type: 3}
     attribute: m_Sprite
     path: 
     classID: 212

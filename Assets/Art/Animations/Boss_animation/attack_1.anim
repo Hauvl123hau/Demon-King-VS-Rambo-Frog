@@ -6,7 +6,7 @@ AnimationClip:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: dragon_knight_firebreath_downward_air_Clip
+  m_Name: attack_1
   serializedVersion: 7
   m_Legacy: 0
   m_Compressed: 0
@@ -21,29 +21,19 @@ AnimationClip:
   - serializedVersion: 2
     curve:
     - time: 0
-      value: {fileID: -5481412473080971986, guid: 181c6812da83f2d4b8db17eb249ee8ef, type: 3}
+      value: {fileID: 7233424214102956340, guid: 6b437d29545e5ae44aede551d15c6caf, type: 3}
     - time: 0.1
-      value: {fileID: 1852015260923151007, guid: 181c6812da83f2d4b8db17eb249ee8ef, type: 3}
+      value: {fileID: 7817170641576639768, guid: 6b437d29545e5ae44aede551d15c6caf, type: 3}
     - time: 0.2
-      value: {fileID: -7709446800582265671, guid: 181c6812da83f2d4b8db17eb249ee8ef, type: 3}
+      value: {fileID: -6953260978874477923, guid: 6b437d29545e5ae44aede551d15c6caf, type: 3}
     - time: 0.3
-      value: {fileID: 4749633536052260023, guid: 181c6812da83f2d4b8db17eb249ee8ef, type: 3}
+      value: {fileID: 6982397941346116692, guid: 6b437d29545e5ae44aede551d15c6caf, type: 3}
     - time: 0.4
-      value: {fileID: -6708727230572602331, guid: 181c6812da83f2d4b8db17eb249ee8ef, type: 3}
+      value: {fileID: -5456652749290744913, guid: 6b437d29545e5ae44aede551d15c6caf, type: 3}
     - time: 0.5
-      value: {fileID: 5284743831218475334, guid: 181c6812da83f2d4b8db17eb249ee8ef, type: 3}
-    - time: 0.6
-      value: {fileID: -1647761818049503579, guid: 181c6812da83f2d4b8db17eb249ee8ef, type: 3}
-    - time: 0.7
-      value: {fileID: -1874774365654196763, guid: 181c6812da83f2d4b8db17eb249ee8ef, type: 3}
-    - time: 0.8
-      value: {fileID: -186406909251060793, guid: 181c6812da83f2d4b8db17eb249ee8ef, type: 3}
-    - time: 0.9
-      value: {fileID: -381259019754045431, guid: 181c6812da83f2d4b8db17eb249ee8ef, type: 3}
-    - time: 1
-      value: {fileID: -6306453568971085600, guid: 181c6812da83f2d4b8db17eb249ee8ef, type: 3}
-    - time: 1.09
-      value: {fileID: -6306453568971085600, guid: 181c6812da83f2d4b8db17eb249ee8ef, type: 3}
+      value: {fileID: 5623575341962427377, guid: 6b437d29545e5ae44aede551d15c6caf, type: 3}
+    - time: 0.59000003
+      value: {fileID: 5623575341962427377, guid: 6b437d29545e5ae44aede551d15c6caf, type: 3}
     attribute: m_Sprite
     path: 
     classID: 212
@@ -62,7 +52,7 @@ AnimationClip:
     m_AdditiveReferencePoseClip: {fileID: 0}
     m_AdditiveReferencePoseTime: 0
     m_StartTime: 0
-    m_StopTime: 1.1
+    m_StopTime: 0.6
     m_OrientationOffsetY: 0
     m_Level: 0
     m_CycleOffset: 0
