@@ -1,16 +1,14 @@
 ﻿using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
-//Greetings from Sid!
 
-//Thank You for watching my tutorials
-//I really hope you find my tutorials helpful and knowledgeable
-//Appreciate your support.
-
-public class GroundEnemy : MonoBehaviour, IDamageDealer
+public class GroundEnemy : MonoBehaviour
 {
-    #region Public Variables
+    private Animator anim;
+    private Rigidbody2D rb;
+
+    [Header("Movement Settings")]
     public float attackDistance; //Minimum distance for attack
     public float moveSpeed;
     public float timer; //Timer for cooldown between attacks
@@ -20,22 +18,41 @@ public class GroundEnemy : MonoBehaviour, IDamageDealer
     [HideInInspector] public bool inRange;
     public GameObject hotZone;
     public GameObject triggerZone;
-    #endregion
 
-    #region Private Variables
-    private Animator anim;
+    [Header("Attack Settings")]
+
     private float distance; //Store the distance b/w enemy and player
     private bool attackMode;
     private bool cooling; //Check if Enemy is cooling after attack
     private float intTimer;
-    private int damage = 1;
-    #endregion
+    public int damage = 1;
+
+    [Header("Enemy States")]
+    public int maxHealth = 3;
+    public int currentHealth;
+    private SpriteRenderer spriteRenderer;
+    private Color ogColor;
+    private bool isDead = false;
+
+    [Header("UI Settings")]
+    public Slider healthBar;
 
     void Awake()
     {
         SelectTarget();
         intTimer = timer; //Store the inital value of timer
         anim = GetComponent<Animator>();
+    }
+
+    void Start()
+    {
+        rb = GetComponent<Rigidbody2D>();
+        currentHealth = maxHealth;
+        spriteRenderer = GetComponentInChildren<SpriteRenderer>(); // Tìm SpriteRenderer từ child objects
+        if (spriteRenderer != null)
+        {
+            ogColor = spriteRenderer.color; // Lưu màu gốc của sprite
+        }
     }
 
     void Update()
@@ -54,6 +71,8 @@ public class GroundEnemy : MonoBehaviour, IDamageDealer
         {
             EnemyLogic();
         }
+        healthBar.value = currentHealth;
+
     }
 
     void EnemyLogic()
@@ -120,6 +139,23 @@ public class GroundEnemy : MonoBehaviour, IDamageDealer
         cooling = true;
     }
 
+    // Method này sẽ được gọi từ Animation Event khi attack animation hit
+    public void DealDamageToPlayer()
+    {
+        if (target != null && target.CompareTag("Player"))
+        {
+            float distanceToPlayer = Vector2.Distance(transform.position, target.position);
+            if (distanceToPlayer <= attackDistance)
+            {
+                PlayerHealth playerHealth = target.GetComponent<PlayerHealth>();
+                if (playerHealth != null)
+                {
+                    playerHealth.TakeDamage(damage);
+                }
+            }
+        }
+    }
+
     private bool InsideOfLimits()
     {
         return transform.position.x > leftLimit.position.x && transform.position.x < rightLimit.position.x;
@@ -138,11 +174,36 @@ public class GroundEnemy : MonoBehaviour, IDamageDealer
         {
             target = rightLimit;
         }
-
-        //Ternary Operator
-        //target = distanceToLeft > distanceToRight ? leftLimit : rightLimit;
-
         Flip();
+    }
+
+    public void TakeDamage(int damage)
+    {
+        currentHealth -= damage;
+        StartCoroutine(FlashRed());
+        if (currentHealth <= 0)
+        {
+            Die();
+        }
+    }
+    private void Die()
+    {
+        if (isDead) return;
+        isDead = true;
+        anim.SetTrigger("die");
+    }
+    public void DieAnimation()
+    {
+        Destroy(gameObject, 0.1f); // Destroy the enemy after 0.1 seconds
+    }
+    private IEnumerator FlashRed()
+    {
+        if (spriteRenderer != null)
+        {
+            spriteRenderer.color = Color.white;
+            yield return new WaitForSeconds(0.2f);
+            spriteRenderer.color = ogColor;
+        }
     }
 
     public void Flip()
@@ -158,18 +219,10 @@ public class GroundEnemy : MonoBehaviour, IDamageDealer
             rotation.y = 0;
         }
 
+        transform.eulerAngles = rotation;
+        
         //Ternary Operator
-        //rotation.y = (currentTarget.position.x < transform.position.x) ? rotation.y = 180f : rotation.y = 0f;        transform.eulerAngles = rotation;
+        //rotation.y = (currentTarget.position.x < transform.position.x) ? rotation.y = 180f : rotation.y = 0f;
     }
 
-    // Implementation of IDamageDealer interface
-    public int GetDamage()
-    {
-        return damage;
-    }
-    
-    public EnemyType GetEnemyType()
-    {
-        return EnemyType.Ground;
-    }
 }

@@ -45,9 +45,8 @@ public class GunController : MonoBehaviour
             gunAnimator.SetTrigger("shoot");
             Destroy(bulletIns, 2f);
             currentClip--;
-            UpdateAmmoUI(); // Cập nhật UI sau khi bắn
+            UpdateAmmoUI(); 
 
-            // Tự động thay đạn khi hết băng
             if (currentClip == 0 && currentAmmo > 0 && !isReloading)
             {
                 StartCoroutine(ReloadCoroutine());

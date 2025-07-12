@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 
-public class FlyEnemy : MonoBehaviour, IDamageDealer
+public class FlyEnemy : MonoBehaviour
 {
     [SerializeField] private float speed;
     [Header("Patrol Settings")]
@@ -192,14 +192,4 @@ public class FlyEnemy : MonoBehaviour, IDamageDealer
         Gizmos.DrawWireSphere(transform.position, attackRange);
     }
 
-    // Implementation of IDamageDealer interface
-    public int GetDamage()
-    {
-        return damage;
-    }
-    
-    public EnemyType GetEnemyType()
-    {
-        return EnemyType.Flying;
-    }
 }

@@ -1,6 +1,6 @@
  using UnityEngine;
 
-public class EnemyBulletScript : MonoBehaviour, IDamageDealer
+public class EnemyBulletScript : MonoBehaviour
 {
     private GameObject player;
     private Rigidbody2D rb;
@@ -36,16 +36,5 @@ public class EnemyBulletScript : MonoBehaviour, IDamageDealer
         {
             Destroy(gameObject);
         }
-    }
-
-    // Implementation of IDamageDealer interface
-    public int GetDamage()
-    {
-        return damage;
-    }
-    
-    public EnemyType GetEnemyType()
-    {
-        return EnemyType.Bullet;
     }
 }

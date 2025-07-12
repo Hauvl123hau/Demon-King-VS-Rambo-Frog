@@ -23,14 +23,6 @@ public class PlayerController : MonoBehaviour
     public bool enableDoubleJump = true;
     private bool canDoubleJump;
 
-    [Header("Wall Slide")]
-    public float wallSlideSpeed = 2f;
-    public Transform wallCheck;
-    public float wallCheckRadius = 0.1f;
-    public LayerMask wallLayer;
-    private bool isTouchingWall;
-    private bool isWallSliding;
-
     [Header("Ground Check")]
     public Transform groundCheck;
     public float groundCheckRadius = 0.1f;
@@ -42,6 +34,7 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private float baseGravity = 3f;
     [SerializeField] private float maxFallGravity = 18f;
     [SerializeField] private float fallSpeedMultiplier = 2f;
+
 
     private Rigidbody2D rb;
     private Animator animator;
@@ -127,14 +120,11 @@ public class PlayerController : MonoBehaviour
     private void FixedUpdate()
     {
         ApplyMovement();
-        ApplyWallSlide();
     }
 
     void CheckEnvironment()
     {
         isGrounded = Physics2D.OverlapCircle(groundCheck.position, groundCheckRadius, groundLayer);
-        isTouchingWall = Physics2D.OverlapCircle(wallCheck.position, wallCheckRadius, wallLayer);
-
         // Reset double jump when grounded
         if (isGrounded)
             canDoubleJump = enableDoubleJump;
@@ -217,27 +207,12 @@ public class PlayerController : MonoBehaviour
             isJumping = false;
     }
 
-
-    void ApplyWallSlide()
-    {
-        if (isTouchingWall && !isGrounded && rb.linearVelocity.y < 0)
-        {
-            isWallSliding = true;
-            rb.linearVelocity = new Vector2(rb.linearVelocity.x, -wallSlideSpeed);
-        }
-        else
-        {
-            isWallSliding = false;
-        }
-    }
-
     void UpdateAnimations()
     {
         bool isJumping = !isGrounded;
         animator.SetBool("isJumping", isJumping);
         animator.SetBool("isRunning", Mathf.Abs(currentSpeed) > 0.1f && isGrounded);
         animator.SetBool("isGrounded", isGrounded);
-        animator.SetBool("isWallSliding", isWallSliding);
         animator.SetFloat("verticalSpeed", rb.linearVelocity.y);
     }
 
@@ -245,7 +220,5 @@ public class PlayerController : MonoBehaviour
     {
         if (groundCheck)
             Gizmos.DrawWireSphere(groundCheck.position, groundCheckRadius);
-        if (wallCheck)
-            Gizmos.DrawWireSphere(wallCheck.position, wallCheckRadius);
     }
 }
