@@ -73,7 +73,7 @@ public class FlyEnemy : MonoBehaviour
         float distanceToPlayer = Vector2.Distance(transform.position, player.transform.position);
 
         // Kiểm tra nếu player vào tầm tấn công và enemy đang chase
-        if (chase && distanceToPlayer <= attackRange && Time.time - lastAttackTime >= attackCooldown && !isAttacking && !isPerformingAttack)
+        if (chase && distanceToPlayer <= attackRange && Time.deltaTime - lastAttackTime >= attackCooldown && !isAttacking && !isPerformingAttack)
         {
             StartAttack();
         }
@@ -163,7 +163,7 @@ public class FlyEnemy : MonoBehaviour
         isPerformingAttack = false;
         hasDealtDamage = false; // Đặt lại biến đã gây sát thương
         // Cập nhật thời gian tấn công cuối cùng để cooldown hoạt động
-        lastAttackTime = Time.time;
+        lastAttackTime = Time.deltaTime;
 
         // Không cần reset animation attack vì dùng trigger
         // Animation sẽ tự động quay về idle/flying state
