@@ -57,6 +57,8 @@ public class GroundEnemy : MonoBehaviour
 
     void Update()
     {
+        if (isDead) return; // Dừng tất cả hành động khi chết
+
         if (!attackMode)
         {
             Move();
@@ -77,6 +79,8 @@ public class GroundEnemy : MonoBehaviour
 
     void EnemyLogic()
     {
+        if (isDead) return; // Dừng logic khi chết
+
         distance = Vector2.Distance(transform.position, target.position);
 
         if (distance > attackDistance)
@@ -97,6 +101,8 @@ public class GroundEnemy : MonoBehaviour
 
     void Move()
     {
+        if (isDead) return; // Dừng di chuyển khi chết
+
         anim.SetBool("canWalk", true);
 
         if (!anim.GetCurrentAnimatorStateInfo(0).IsName("Enemy_attack"))
@@ -109,6 +115,8 @@ public class GroundEnemy : MonoBehaviour
 
     void Attack()
     {
+        if (isDead) return; // Dừng tấn công khi chết
+
         timer = intTimer; //Reset Timer when Player enter Attack Range
         attackMode = true; //To check if Enemy can still attack or not
 
@@ -142,6 +150,8 @@ public class GroundEnemy : MonoBehaviour
     // Method này sẽ được gọi từ Animation Event khi attack animation hit
     public void DealDamageToPlayer()
     {
+        if (isDead) return; // Không gây sát thương khi chết
+
         if (target != null && target.CompareTag("Player"))
         {
             float distanceToPlayer = Vector2.Distance(transform.position, target.position);
@@ -179,6 +189,8 @@ public class GroundEnemy : MonoBehaviour
 
     public void TakeDamage(int damage)
     {
+        if (isDead) return; // Không nhận sát thương khi đã chết
+
         currentHealth -= damage;
         StartCoroutine(FlashRed());
         if (currentHealth <= 0)
@@ -190,7 +202,25 @@ public class GroundEnemy : MonoBehaviour
     {
         if (isDead) return;
         isDead = true;
-        anim.SetTrigger("die");
+
+        // Dừng tất cả các hành động
+        attackMode = false;
+        cooling = false;
+        inRange = false;
+
+        // Dừng animation di chuyển và tấn công
+        if (anim != null)
+        {
+            anim.SetBool("canWalk", false);
+            anim.SetBool("Attack", false);
+            anim.SetTrigger("die");
+        }
+
+        // Vô hiệu hóa các zone
+        if (hotZone != null)
+            hotZone.SetActive(false);
+        if (triggerZone != null)
+            triggerZone.SetActive(false);
     }
     public void DieAnimation()
     {
