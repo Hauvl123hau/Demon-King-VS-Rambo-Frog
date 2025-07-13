@@ -604,9 +604,9 @@ TextureImporter:
       name: NightBorne_15
       rect:
         serializedVersion: 2
-        x: 19
+        x: 20
         y: 176
-        width: 35
+        width: 41
         height: 36
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
