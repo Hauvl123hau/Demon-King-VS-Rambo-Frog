@@ -1,6 +1,6 @@
 using UnityEngine;
+using UnityEngine.UI;
 
-// Ví dụ về Boss enemy với damage cao hơn
 public class BossEnemy : MonoBehaviour
 {
     [Header("Movement Settings")]
@@ -17,6 +17,14 @@ public class BossEnemy : MonoBehaviour
         player = GameObject.FindGameObjectWithTag("Player");
     }
 
+    [Header("Health Settings")]
+    [SerializeField] private int maxHealth = 5;
+    private int currentHealth;
+    private SpriteRenderer spriteRenderer;
+    private Color originalColor;
+    private bool isDead = false;
+    [SerializeField] private Slider healthBar;
+
     void Update()
     {
         if (player == null) return;
@@ -30,7 +38,7 @@ public class BossEnemy : MonoBehaviour
     }
     private void Flip()
     {
-        if(transform.position.x > player.transform.position.x)
+        if (transform.position.x > player.transform.position.x)
         {
             transform.rotation = Quaternion.Euler(0, 180, 0); // Quay mặt về bên trái
         }
