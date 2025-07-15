@@ -55,6 +55,8 @@ public class FlyEnemyShooting : MonoBehaviour
 
     private void Update()
     {
+        if (isDead) return; // Không làm gì nếu enemy đã chết
+
         shootingRange = Vector2.Distance(transform.position, player.transform.position);
         if (shootingRange < 10)
         {
