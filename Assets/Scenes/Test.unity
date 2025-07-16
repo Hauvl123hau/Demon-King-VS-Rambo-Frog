@@ -977,6 +977,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 4073698699698431753, guid: 5e0ffd56eae1b2944ac51c5bb46621c6, type: 3}
+      propertyPath: m_AnchorMax.y
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 7034780916014081518, guid: 5e0ffd56eae1b2944ac51c5bb46621c6, type: 3}
       propertyPath: m_Name
       value: NightBorne
