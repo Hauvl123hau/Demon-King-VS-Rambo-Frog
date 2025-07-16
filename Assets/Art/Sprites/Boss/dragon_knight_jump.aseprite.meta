@@ -125,8 +125,8 @@ ScriptedImporter:
   animatedSpriteImportData:
   - name: dragon_knight_jump
     originalName: 
-    pivot: {x: 0.5483871, y: -0.9375}
-    alignment: 9
+    pivot: {x: 1, y: 0}
+    alignment: 8
     border: {x: 0, y: 0, z: 0, w: 0}
     customData: 
     rect:
