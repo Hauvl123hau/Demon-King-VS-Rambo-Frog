@@ -6,6 +6,7 @@ TagManager:
   tags:
   - Enemy
   - EnemyAttack
+  - Heart
   layers:
   - Default
   - TransparentFX
@@ -52,14 +53,17 @@ TagManager:
   - name: ForeGround
     uniqueID: 3568487297
     locked: 0
-  - name: Player
-    uniqueID: 1557608135
-    locked: 0
   - name: Enemy
     uniqueID: 504004951
     locked: 0
+  - name: Player
+    uniqueID: 1557608135
+    locked: 0
   - name: UI
     uniqueID: 3594433285
+    locked: 0
+  - name: Item
+    uniqueID: 4138525065
     locked: 0
   m_RenderingLayers:
   - Default
