@@ -164,7 +164,13 @@ AnimatorController:
   m_PrefabAsset: {fileID: 0}
   m_Name: DragonKnight_Animator
   serializedVersion: 5
-  m_AnimatorParameters: []
+  m_AnimatorParameters:
+  - m_Name: open
+    m_Type: 9
+    m_DefaultFloat: 0
+    m_DefaultInt: 0
+    m_DefaultBool: 0
+    m_Controller: {fileID: 9100000}
   m_AnimatorLayers:
   - serializedVersion: 5
     m_Name: Base Layer
@@ -227,7 +233,7 @@ AnimatorStateMachine:
     m_Position: {x: 40, y: 200, z: 0}
   - serializedVersion: 1
     m_State: {fileID: 3924529799075395539}
-    m_Position: {x: 400, y: -50, z: 0}
+    m_Position: {x: 380, y: 0, z: 0}
   - serializedVersion: 1
     m_State: {fileID: -3641354488076325885}
     m_Position: {x: 970, y: 50, z: 0}
@@ -252,7 +258,7 @@ AnimatorStateMachine:
   m_EntryPosition: {x: 50, y: 120, z: 0}
   m_ExitPosition: {x: 800, y: 120, z: 0}
   m_ParentStateMachinePosition: {x: 800, y: 20, z: 0}
-  m_DefaultState: {fileID: 3924529799075395539}
+  m_DefaultState: {fileID: -2973063944741041942}
 --- !u!1102 &2293018860526243701
 AnimatorState:
   serializedVersion: 6
