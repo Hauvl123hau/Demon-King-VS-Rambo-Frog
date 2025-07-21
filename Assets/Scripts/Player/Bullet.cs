@@ -10,19 +10,25 @@ public class Bullet : MonoBehaviour
         if (enemy)
         {
             enemy.TakeDamage(bulletDamage);
-            Destroy(gameObject); // Destroy the bullet on hit
+            Destroy(gameObject); 
         }
         FlyEnemy flyEnemy = collision.GetComponent<FlyEnemy>();
         if (flyEnemy)
         {
             flyEnemy.TakeDamage(bulletDamage);
-            Destroy(gameObject); // Destroy the bullet on hit
+            Destroy(gameObject); 
         }
         FlyEnemyShooting flyEnemyShooting = collision.GetComponent<FlyEnemyShooting>();
         if (flyEnemyShooting)
         {
             flyEnemyShooting.TakeDamage(bulletDamage);
-            Destroy(gameObject); // Destroy the bullet on hit
+            Destroy(gameObject); 
+        }
+        BossHealth bossHealth = collision.GetComponent<BossHealth>();
+        if (bossHealth)
+        {
+            bossHealth.TakeDamage(bulletDamage);
+            Destroy(gameObject); 
         }
     }
 }
