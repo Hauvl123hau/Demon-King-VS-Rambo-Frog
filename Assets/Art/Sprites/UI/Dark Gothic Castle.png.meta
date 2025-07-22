@@ -134,7 +134,8 @@ TextureImporter:
     secondaryTextures: []
     spriteCustomMetadata:
       entries: []
-    nameFileIdTable: {}
+    nameFileIdTable:
+      Dark Gothic Castle_0: 4189664649083290900
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 
