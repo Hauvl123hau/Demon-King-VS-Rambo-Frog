@@ -57,7 +57,7 @@ public class GroundEnemy : MonoBehaviour
 
     void Update()
     {
-        if (isDead) return; // Dừng tất cả hành động khi chết
+        if (isDead) return; 
 
         if (!attackMode)
         {
@@ -79,7 +79,7 @@ public class GroundEnemy : MonoBehaviour
 
     void EnemyLogic()
     {
-        if (isDead) return; // Dừng logic khi chết
+        if (isDead) return; 
 
         distance = Vector2.Distance(transform.position, target.position);
 
@@ -101,7 +101,7 @@ public class GroundEnemy : MonoBehaviour
 
     void Move()
     {
-        if (isDead) return; // Dừng di chuyển khi chết
+        if (isDead) return; 
 
         anim.SetBool("canWalk", true);
 
@@ -115,10 +115,10 @@ public class GroundEnemy : MonoBehaviour
 
     void Attack()
     {
-        if (isDead) return; // Dừng tấn công khi chết
+        if (isDead) return; 
 
-        timer = intTimer; //Reset Timer when Player enter Attack Range
-        attackMode = true; //To check if Enemy can still attack or not
+        timer = intTimer; 
+        attackMode = true; 
 
         anim.SetBool("canWalk", false);
         anim.SetBool("Attack", true);
@@ -147,10 +147,9 @@ public class GroundEnemy : MonoBehaviour
         cooling = true;
     }
 
-    // Method này sẽ được gọi từ Animation Event khi attack animation hit
     public void DealDamageToPlayer()
     {
-        if (isDead) return; // Không gây sát thương khi chết
+        if (isDead) return;
 
         if (target != null && target.CompareTag("Player"))
         {

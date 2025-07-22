@@ -1,5 +1,6 @@
 using UnityEngine;
-using System.Collections; // Thêm dòng này
+using UnityEngine.UI;
+using System.Collections;
 
 public class GunController : MonoBehaviour
 {
@@ -12,14 +13,16 @@ public class GunController : MonoBehaviour
     public float shootRate = 0.5f;
     float nextShootTime = 0f;
     public int currentClip, maxClip = 7, currentAmmo, maxAmmo = 30;
-    public float reloadDelay = 1.5f; // Thời gian thay đạn
-    public GameObject[] ammo_ui;
+    public float reloadDelay = 1.5f; 
+    public BulletUI bulletUI; 
+    public Text ammoText;
 
     bool isReloading = false;
 
     void Start()
     {
-        // Khởi tạo UI đạn
+        currentClip = maxClip; // Bắt đầu với băng đạn đầy
+        bulletUI.SetMaxBullets(maxClip);
         UpdateAmmoUI();
     }
 
@@ -45,7 +48,7 @@ public class GunController : MonoBehaviour
             gunAnimator.SetTrigger("shoot");
             Destroy(bulletIns, 2f);
             currentClip--;
-            UpdateAmmoUI(); 
+            UpdateAmmoUI();
 
             if (currentClip == 0 && currentAmmo > 0 && !isReloading)
             {
@@ -98,18 +101,16 @@ public class GunController : MonoBehaviour
     // Phương thức cập nhật UI hiển thị đạn
     void UpdateAmmoUI()
     {
-        // Kiểm tra nếu ammo_ui đã được gán
-        if (ammo_ui == null || ammo_ui.Length == 0)
-            return;
-
-        // Cập nhật hiển thị các viên đạn trong băng
-        for (int i = 0; i < ammo_ui.Length; i++)
+        // Cập nhật UI hiển thị số đạn trong băng
+        if (bulletUI != null)
         {
-            if (ammo_ui[i] != null)
-            {
-                // Hiển thị viên đạn nếu vị trí này có đạn, ẩn nếu không
-                ammo_ui[i].SetActive(i < currentClip);
-            }
+            bulletUI.UpdateBullets(currentClip);
+        }
+        
+        // Cập nhật text hiển thị đạn dự trữ
+        if (ammoText != null)
+        {
+            ammoText.text = "/" + currentAmmo.ToString();
         }
     }
 }

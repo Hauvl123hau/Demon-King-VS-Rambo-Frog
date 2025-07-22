@@ -3,6 +3,8 @@ using UnityEngine.UI;
 
 public class BossEnemy : MonoBehaviour
 {
+    
+
     [Header("Movement Settings")]
     [SerializeField] private float speed;
 
@@ -16,14 +18,6 @@ public class BossEnemy : MonoBehaviour
     {
         player = GameObject.FindGameObjectWithTag("Player");
     }
-
-    [Header("Health Settings")]
-    [SerializeField] private int maxHealth = 5;
-    private int currentHealth;
-    private SpriteRenderer spriteRenderer;
-    private Color originalColor;
-    private bool isDead = false;
-    [SerializeField] private Slider healthBar;
 
     void Update()
     {
