@@ -13,6 +13,8 @@ GameObject:
   - component: {fileID: 7022708878584650048}
   - component: {fileID: 6546094857245659982}
   - component: {fileID: 4075171690647664804}
+  - component: {fileID: 1337278770286627758}
+  - component: {fileID: 1637989403406071133}
   m_Layer: 0
   m_Name: BossDragonKnight
   m_TagString: Enemy
@@ -46,7 +48,7 @@ Rigidbody2D:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 636612695269640871}
-  m_BodyType: 1
+  m_BodyType: 0
   m_Simulated: 1
   m_UseFullKinematicContacts: 0
   m_UseAutoMass: 0
@@ -99,7 +101,7 @@ BoxCollider2D:
   m_UsedByEffector: 0
   m_CompositeOperation: 0
   m_CompositeOrder: 0
-  m_Offset: {x: -1.3801079, y: 0.5498235}
+  m_Offset: {x: -2.6077833, y: 1.0158023}
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
     pivot: {x: 1, y: 0}
@@ -109,7 +111,7 @@ BoxCollider2D:
     drawMode: 0
     adaptiveTiling: 0
   m_AutoTiling: 0
-  m_Size: {x: 0.57896423, y: 1.099647}
+  m_Size: {x: 1.2420864, y: 2.1032946}
   m_EdgeRadius: 0
 --- !u!114 &6546094857245659982
 MonoBehaviour:
@@ -141,11 +143,66 @@ MonoBehaviour:
   anim: {fileID: 8728874339474883746}
   player: {fileID: 0}
   raycastOrigin: {fileID: 3808359028868253839}
+  dashAttack: {fileID: 1337278770286627758}
+  chaseAttack: {fileID: 1637989403406071133}
   isAttacking: 0
   idleDuration: 1
   stateTimer: 0
   meleeAttackRange: 4
-  fireBreathRange: 7
+  dashFireComboRange: 10
+  obstacleLayerMask:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  playerLayer:
+    serializedVersion: 2
+    m_Bits: 512
+  dashCooldown: 3
+--- !u!114 &1337278770286627758
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 636612695269640871}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: baabe980ec0330d42bba0edb0a220d65, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  anim: {fileID: 8728874339474883746}
+  player: {fileID: 0}
+  dashSpeed: 15
+  dashDuration: 0.5
+  fireBreathRange: 5
+  dashCooldown: 3
+  fireBreathDelay: 0.2
+  raycastOrigin: {fileID: 3808359028868253839}
+  obstacleLayerMask:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  playerLayer:
+    serializedVersion: 2
+    m_Bits: 1
+--- !u!114 &1637989403406071133
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 636612695269640871}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1bc4945131222d54fa0d6fd5fcee1ffd, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  anim: {fileID: 8728874339474883746}
+  player: {fileID: 0}
+  raycastOrigin: {fileID: 3808359028868253839}
+  chaseSpeed: 3
+  meleeAttackRange: 4
+  maxChaseDistance: 15
+  stopDistance: 0.5
+  attackCooldown: 1.5
   obstacleLayerMask:
     serializedVersion: 2
     m_Bits: 4294967295
@@ -177,7 +234,7 @@ Transform:
   m_GameObject: {fileID: 785489663746601700}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -1.41, y: 0.41, z: 0}
+  m_LocalPosition: {x: -2.65, y: 0.69, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []

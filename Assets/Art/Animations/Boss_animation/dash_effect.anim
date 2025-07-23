@@ -6,7 +6,7 @@ AnimationClip:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: prep_dash
+  m_Name: dash_effect
   serializedVersion: 7
   m_Legacy: 0
   m_Compressed: 0
@@ -21,13 +21,13 @@ AnimationClip:
   - serializedVersion: 2
     curve:
     - time: 0
-      value: {fileID: 4031134441821909580, guid: 1dca66067e404ad47867fe14da6302d0, type: 3}
+      value: {fileID: -7546499584999530168, guid: d23e516598af4c841a971df3acdc2c29, type: 3}
     - time: 0.1
-      value: {fileID: 8752370603911561366, guid: 1dca66067e404ad47867fe14da6302d0, type: 3}
+      value: {fileID: 8064043713527301020, guid: d23e516598af4c841a971df3acdc2c29, type: 3}
     - time: 0.2
-      value: {fileID: -3363642499092088081, guid: 1dca66067e404ad47867fe14da6302d0, type: 3}
+      value: {fileID: 8380197163434241082, guid: d23e516598af4c841a971df3acdc2c29, type: 3}
     - time: 0.29000002
-      value: {fileID: -3363642499092088081, guid: 1dca66067e404ad47867fe14da6302d0, type: 3}
+      value: {fileID: 8380197163434241082, guid: d23e516598af4c841a971df3acdc2c29, type: 3}
     attribute: m_Sprite
     path: 
     classID: 212
@@ -39,21 +39,8 @@ AnimationClip:
     m_Center: {x: 0, y: 0, z: 0}
     m_Extent: {x: 0, y: 0, z: 0}
   m_ClipBindingConstant:
-    genericBindings:
-    - serializedVersion: 2
-      path: 0
-      attribute: 0
-      script: {fileID: 0}
-      typeID: 212
-      customType: 23
-      isPPtrCurve: 1
-      isIntCurve: 0
-      isSerializeReferenceCurve: 0
-    pptrCurveMapping:
-    - {fileID: 4031134441821909580, guid: 1dca66067e404ad47867fe14da6302d0, type: 3}
-    - {fileID: 8752370603911561366, guid: 1dca66067e404ad47867fe14da6302d0, type: 3}
-    - {fileID: -3363642499092088081, guid: 1dca66067e404ad47867fe14da6302d0, type: 3}
-    - {fileID: -3363642499092088081, guid: 1dca66067e404ad47867fe14da6302d0, type: 3}
+    genericBindings: []
+    pptrCurveMapping: []
   m_AnimationClipSettings:
     serializedVersion: 2
     m_AdditiveReferencePoseClip: {fileID: 0}
@@ -78,11 +65,4 @@ AnimationClip:
   m_EulerEditorCurves: []
   m_HasGenericRootTransform: 0
   m_HasMotionFloatCurves: 0
-  m_Events:
-  - time: 0.29
-    functionName: StartDash
-    data: 
-    objectReferenceParameter: {fileID: 0}
-    floatParameter: 0
-    intParameter: 0
-    messageOptions: 0
+  m_Events: []
