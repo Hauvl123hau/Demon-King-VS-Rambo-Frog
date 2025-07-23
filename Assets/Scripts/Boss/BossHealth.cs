@@ -12,7 +12,12 @@ public class BossHealth : MonoBehaviour
     private SpriteRenderer spriteRenderer;
     private Color ogColor;
     private bool isDead = false;
+    private bool hasDrunkPotion = false;
+    private bool isInvulnerable = false; // Thêm biến này
     public Slider healthBar;
+    [Header("Potion Effects")]
+    public float scaleMultiplier = 1.2f; // Boss sẽ to lên 1.2 lần
+    private Vector3 originalScale;
 
     void Start()
     {
@@ -20,25 +25,64 @@ public class BossHealth : MonoBehaviour
         spriteRenderer = GetComponent<SpriteRenderer>();
         ogColor = spriteRenderer.color;
         anim = GetComponent<Animator>();
-        rb = GetComponent<Rigidbody2D>(); 
+        rb = GetComponent<Rigidbody2D>();
+        originalScale = transform.localScale; // Lưu kích thước gốc
     }
 
     void Update()
     {
-        healthBar.value =  currentHealth;
+        healthBar.value = currentHealth;
     }
 
     public void TakeDamage(int damage)
     {
-        if (isDead) return; 
+        if (isDead || isInvulnerable) return; // Thêm kiểm tra isInvulnerable
         
         currentHealth -= damage;
-        StartCoroutine(Flash());     
+        StartCoroutine(Flash());
+        
+        // Kiểm tra nếu máu <= 50% và chưa uống thuốc
+        if (currentHealth <= maxHealth * 0.5f && !hasDrunkPotion)
+        {
+            hasDrunkPotion = true;
+            isInvulnerable = true; // Bật miễn sát thương
+            if (anim != null)
+            {
+                anim.SetTrigger("drinkPotion");
+            }
+        }
+        
         if (currentHealth <= 0)
         {
             Die();
         }
     }
+
+    // Method này sẽ được gọi từ Animation Event khi animation uống thuốc kết thúc
+    public void OnPotionDrinkComplete()
+    {
+        StartCoroutine(ScaleUpAndEndInvulnerability());
+    }
+
+    private IEnumerator ScaleUpAndEndInvulnerability()
+    {
+        Vector3 targetScale = originalScale * scaleMultiplier;
+        float duration = 0.5f; // Thời gian to lên
+        float elapsedTime = 0f;
+        Vector3 startScale = transform.localScale;
+
+        while (elapsedTime < duration)
+        {
+            elapsedTime += Time.deltaTime;
+            float t = elapsedTime / duration;
+            transform.localScale = Vector3.Lerp(startScale, targetScale, t);
+            yield return null;
+        }
+
+        transform.localScale = targetScale;
+        isInvulnerable = false; // Tắt miễn sát thương sau khi hoàn thành
+    }
+
     private void Die()
     {
         if (isDead) return;
