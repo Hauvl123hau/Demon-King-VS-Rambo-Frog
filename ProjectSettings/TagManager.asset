@@ -8,6 +8,7 @@ TagManager:
   - EnemyAttack
   - Heart
   - Trap
+  - Audio
   layers:
   - Default
   - TransparentFX
