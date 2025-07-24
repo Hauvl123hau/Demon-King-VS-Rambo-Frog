@@ -12,6 +12,7 @@ public class BossController : MonoBehaviour
     public bool dashAttackOn = false;
     public bool chaseAttackOn = false;
     public bool shootFireballsOn = false;
+    public bool RandomAttackLoop = true;
     public bool moveToA = false;
     public bool moveToB = false;
     public Transform targetA;
@@ -23,13 +24,6 @@ public class BossController : MonoBehaviour
         DashFireCombo,
         ShootFireballs,
         ChaseAttack       
-    }
-    private enum BossState2
-    {
-        Idle,
-        DashFireCombo,
-        ChaseAttack,
-        DrinkPotion
     }
     private BossState1 currentState = BossState1.Idle;
     public float idleDuration = 1f;
@@ -96,7 +90,7 @@ public class BossController : MonoBehaviour
             case BossState1.Idle:
                 if (moveToA && targetA != null)
                 {
-                    MoveAndJumpToPlatform(targetA.position, 8f, 1.5f); // 8f lực nhảy, 1.5f khoảng di chuyển ngắn
+                    MoveAndJumpToPlatform(targetA.position, 8f, 1.5f);
                     FaceMoveDirection(targetA.position);
                 }
                 else if (moveToB && targetB != null)
@@ -104,7 +98,10 @@ public class BossController : MonoBehaviour
                     MoveAndJumpToPlatform(targetB.position, 8f, 1.5f);
                     FaceMoveDirection(targetB.position);
                 }
-                if (stateTimer <= 0f) ChooseAttackByDistance();
+                if (stateTimer <= 0f)
+                {
+                    ChooseRandomAttack();
+                }
                 break;
             case BossState1.DashFireCombo:
                 break;
@@ -208,6 +205,46 @@ public class BossController : MonoBehaviour
         {
             Gizmos.DrawLine(raycastOrigin.position, player.position);
             Gizmos.DrawWireSphere(raycastOrigin.position, 0.2f);
+        }
+    }
+
+    // Chọn đòn tấn công ngẫu nhiên cho BossState1
+    private void ChooseRandomAttack()
+    {
+        if (player == null) return;
+        // Nếu bật RandomAttackLoop thì random trạng thái attack
+        if (RandomAttackLoop)
+        {
+            dashAttackOn = UnityEngine.Random.value > 0.5f;
+            chaseAttackOn = UnityEngine.Random.value > 0.5f;
+            shootFireballsOn = UnityEngine.Random.value > 0.5f;
+        }
+        int attackCount = 0;
+        System.Collections.Generic.List<BossState1> possibleAttacks = new System.Collections.Generic.List<BossState1>();
+        if (shootFireballsOn && shootFireballs != null) { possibleAttacks.Add(BossState1.ShootFireballs); attackCount++; }
+        if (dashAttackOn && dashAttack != null && dashAttack.CanPerformDashAttack()) { possibleAttacks.Add(BossState1.DashFireCombo); attackCount++; }
+        if (chaseAttackOn && chaseAttack != null) { possibleAttacks.Add(BossState1.ChaseAttack); attackCount++; }
+        if (possibleAttacks.Count == 0)
+        {
+            stateTimer = idleDuration;
+            return;
+        }
+        int randomIndex = UnityEngine.Random.Range(0, possibleAttacks.Count);
+        BossState1 chosenAttack = possibleAttacks[randomIndex];
+        switch (chosenAttack)
+        {
+            case BossState1.ShootFireballs:
+                TriggerShootFireballs();
+                currentState = BossState1.ShootFireballs;
+                break;
+            case BossState1.DashFireCombo:
+                TriggerDashFireCombo();
+                currentState = BossState1.DashFireCombo;
+                break;
+            case BossState1.ChaseAttack:
+                TriggerChaseAttack();
+                currentState = BossState1.ChaseAttack;
+                break;
         }
     }
 
