@@ -4,6 +4,7 @@ using System.Collections;
 
 public class GunController : MonoBehaviour
 {
+    AudioSource shootSound;
     public Transform Gun;
     public Animator gunAnimator;
     Vector2 direction;
@@ -21,6 +22,7 @@ public class GunController : MonoBehaviour
 
     void Start()
     {
+        shootSound = GetComponent<AudioSource>();
         currentClip = maxClip; // Bắt đầu với băng đạn đầy
         bulletUI.SetMaxBullets(maxClip);
         UpdateAmmoUI();
@@ -43,6 +45,7 @@ public class GunController : MonoBehaviour
     {
         if (currentClip > 0)
         {
+            shootSound.Play(); // Phát âm thanh khi bắn
             GameObject bulletIns = Instantiate(bullet, shootPoint.position, shootPoint.rotation);
             bulletIns.GetComponent<Rigidbody2D>().AddForce(bulletIns.transform.right * bulletSpeed);
             gunAnimator.SetTrigger("shoot");
