@@ -22,7 +22,17 @@ public class FallTrap : MonoBehaviour
     {
         if (collision.gameObject.CompareTag("Player"))
         {
-            SceneManager.LoadScene("Lever-1");
+            // Hiển thị UI tử vong khi người chơi bị bẫy rơi đè
+            DeadUI deadUI = FindObjectOfType<DeadUI>();
+            if (deadUI != null)
+            {
+                deadUI.ShowDeadPanelWithMessage("Bị nghiền nát bởi bẫy!");
+            }
+            else
+            {
+                // Quay lại tải trực tiếp cảnh nếu không tìm thấy DeadUI
+                SceneManager.LoadScene("Lever-1");
+            }
         }
     }    private void khoiphuc()
     {

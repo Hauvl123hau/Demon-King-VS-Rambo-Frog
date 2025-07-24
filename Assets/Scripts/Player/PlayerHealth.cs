@@ -44,13 +44,29 @@ public class PlayerHealth : MonoBehaviour
 
         if (currentHealth <= 0)
         {
-            //Die();
+            Die();
         }
     }
 
     private void Die()
     {
-        // Handle player death (e.g., respawn, game over)
+        // Tìm thành phần DeadUI và hiển thị panel tử vong
+        DeadUI deadUI = FindObjectOfType<DeadUI>();
+        if (deadUI != null)
+        {
+            deadUI.ShowDeadPanel();
+        }
+        else
+        {
+            Debug.LogError("Không tìm thấy thành phần DeadUI trong cảnh!");
+        }
+        
+        // Vô hiệu hóa điều khiển người chơi hoặc hoạt ảnh nếu cần
+        Rigidbody2D rb = GetComponent<Rigidbody2D>();
+        if (rb != null)
+        {
+            rb.linearVelocity = Vector2.zero;
+        }
     }
 
     private IEnumerator FlashRed()

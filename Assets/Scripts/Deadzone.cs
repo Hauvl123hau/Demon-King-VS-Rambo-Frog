@@ -17,9 +17,18 @@ public class Deadzone : MonoBehaviour
     {
         if (collision.gameObject.CompareTag("Player"))
         {
-            // Load level 1 when player falls into the hole
-            SceneManager.LoadScene("Lever-1");
-            Debug.Log("Player fell into hole. Reloading Lever 1.");
+            // Hiển thị UI tử vong khi người chơi rơi xuống hố
+            DeadUI deadUI = FindObjectOfType<DeadUI>();
+            if (deadUI != null)
+            {
+                deadUI.ShowDeadPanelWithMessage("Bạn đã rơi xuống hố!");
+            }
+            else
+            {
+                // Quay lại tải trực tiếp cảnh nếu không tìm thấy DeadUI
+                SceneManager.LoadScene("Lever-1");
+                Debug.Log("Người chơi rơi xuống hố. Đang tải lại Lever 1.");
+            }
         }
     }
 }

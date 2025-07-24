@@ -17,7 +17,12 @@ public class PauseMenu : MonoBehaviour
     }
     public void Exit()
     {
-       pauseMenu.SetActive(false);
+        pauseMenu.SetActive(false);
+        Time.timeScale = 1; // Resume the game
+    }
+    public void Restart()
+    {
+        SceneManager.LoadScene("Lever-1");
         Time.timeScale = 1; // Resume the game
     }
 }
