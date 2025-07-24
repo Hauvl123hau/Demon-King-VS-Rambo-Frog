@@ -8,6 +8,7 @@ public class BossController : MonoBehaviour
     public DashAttack dashAttack;
     public ChaseAttack chaseAttack;
     public ShootFireballsAttack shootFireballs;
+    public BossHealth bossHealth;
     public bool dashAttackOn = false;
     public bool chaseAttackOn = false;
     public bool shootFireballsOn = false;
@@ -16,8 +17,21 @@ public class BossController : MonoBehaviour
     public Transform targetA;
     public Transform targetB;
     public float moveSpeed = 3f;
-    private enum BossState { Idle, DashFireCombo, ChaseAttack, ShootFireballs }
-    private BossState currentState = BossState.Idle;
+    private enum BossState1
+    {
+        Idle,
+        DashFireCombo,
+        ShootFireballs,
+        ChaseAttack       
+    }
+    private enum BossState2
+    {
+        Idle,
+        DashFireCombo,
+        ChaseAttack,
+        DrinkPotion
+    }
+    private BossState1 currentState = BossState1.Idle;
     public float idleDuration = 1f;
     public float stateTimer;
     public float dashFireComboRange = 10f;
@@ -70,7 +84,7 @@ public class BossController : MonoBehaviour
 
     private void Update()
     {
-        if (player != null && currentState != BossState.DashFireCombo) FacePlayer();
+        if (player != null && currentState != BossState1.DashFireCombo) FacePlayer();
         bool isDashAttacking = dashAttackOn && dashAttack != null && dashAttack.IsPerformingCombo;
         bool isChaseAttacking = chaseAttackOn && chaseAttack != null && chaseAttack.IsPerformingChaseAttack;
         if (isDashAttacking || isChaseAttacking) return;
@@ -79,7 +93,7 @@ public class BossController : MonoBehaviour
         if (anim != null) anim.SetBool("isChasing", isMovingToTarget);
         switch (currentState)
         {
-            case BossState.Idle:
+            case BossState1.Idle:
                 if (moveToA && targetA != null)
                 {
                     MoveAndJumpToPlatform(targetA.position, 8f, 1.5f); // 8f lực nhảy, 1.5f khoảng di chuyển ngắn
@@ -92,16 +106,16 @@ public class BossController : MonoBehaviour
                 }
                 if (stateTimer <= 0f) ChooseAttackByDistance();
                 break;
-            case BossState.DashFireCombo:
+            case BossState1.DashFireCombo:
                 break;
-            case BossState.ChaseAttack:
+            case BossState1.ChaseAttack:
                 if (chaseAttack != null && chaseAttack.IsPerformingChaseAttack)
                 {
                     float elapsedTime = chaseAttack.GetElapsedTime();
                     if (elapsedTime >= chaseAttackDuration) chaseAttack.StopChaseAttack();
                 }
                 break;
-            case BossState.ShootFireballs:
+            case BossState1.ShootFireballs:
                 fireballAttackTimer += Time.deltaTime;
                 if (fireballShotsCount < maxFireballShots)
                 {
@@ -113,7 +127,7 @@ public class BossController : MonoBehaviour
                 }
                 else
                 {
-                    currentState = BossState.Idle;
+                    currentState = BossState1.Idle;
                     stateTimer = idleDuration;
                 }
                 break;
@@ -160,17 +174,17 @@ public class BossController : MonoBehaviour
             if (shootFireballsOn && shootFireballs != null)
             {
                 TriggerShootFireballs();
-                currentState = BossState.ShootFireballs;
+                currentState = BossState1.ShootFireballs;
             }
             else if (distanceToPlayer <= dashFireComboRange && dashAttackOn && dashAttack != null && dashAttack.CanPerformDashAttack())
             {
                 TriggerDashFireCombo();
-                currentState = BossState.DashFireCombo;
+                currentState = BossState1.DashFireCombo;
             }
             else if (chaseAttackOn && chaseAttack != null)
             {
                 TriggerChaseAttack();
-                currentState = BossState.ChaseAttack;
+                currentState = BossState1.ChaseAttack;
             }
             else stateTimer = idleDuration;
         }
@@ -179,7 +193,7 @@ public class BossController : MonoBehaviour
             if (chaseAttackOn && chaseAttack != null)
             {
                 TriggerChaseAttack();
-                currentState = BossState.ChaseAttack;
+                currentState = BossState1.ChaseAttack;
             }
             else stateTimer = idleDuration;
         }
@@ -206,7 +220,7 @@ public class BossController : MonoBehaviour
     public void TriggerChaseAttack()
     {
         if (!chaseAttackOn || chaseAttack == null) return;
-        currentState = BossState.ChaseAttack;
+        currentState = BossState1.ChaseAttack;
         chaseAttack.StartChaseAttack(player);
     }
     public void SetChaseAttackDuration(float newDuration)
@@ -219,18 +233,18 @@ public class BossController : MonoBehaviour
     }
     private void OnChaseAttackComplete()
     {
-        currentState = BossState.Idle;
+        currentState = BossState1.Idle;
         stateTimer = idleDuration;
     }
     public void TriggerDashFireCombo()
     {
         if (!dashAttackOn || dashAttack == null) return;
-        currentState = BossState.DashFireCombo;
+        currentState = BossState1.DashFireCombo;
         dashAttack.StartDashFireCombo(player);
     }
     private void OnDashFireComboComplete()
     {
-        currentState = BossState.Idle;
+        currentState = BossState1.Idle;
         stateTimer = idleDuration;
     }
     private void OnDestroy()

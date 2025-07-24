@@ -3,13 +3,16 @@ using UnityEngine;
 public class BossAnimationEvents : MonoBehaviour
 {
     private BossController bossController;
+    private BossHealth bossHealth;
     private DashAttack dashAttack;
     private ChaseAttack chaseAttack;
     private ShootFireballsAttack shootFireballsAttack;
+    
 
     private void Awake()
     {
         bossController = GetComponentInParent<BossController>();
+        bossHealth = GetComponentInParent<BossHealth>();
         dashAttack = GetComponentInParent<DashAttack>();
         chaseAttack = GetComponentInParent<ChaseAttack>();
         shootFireballsAttack = GetComponentInParent<ShootFireballsAttack>();
@@ -53,6 +56,20 @@ public class BossAnimationEvents : MonoBehaviour
         else
         {
             Debug.LogWarning("ShootFireballsAttack component không tìm thấy!");
+        }
+    }
+
+    // Animation Event: Được gọi khi animation chết kết thúc
+    private void EndDieAnimation()
+    {
+        if (bossHealth != null)
+        {
+            bossHealth.DieAnimation();
+            Debug.Log("Animation Event: Boss chết hoàn tất!");
+        }
+        else
+        {
+            Debug.LogWarning("BossHealth component không tìm thấy!");
         }
     }
 }

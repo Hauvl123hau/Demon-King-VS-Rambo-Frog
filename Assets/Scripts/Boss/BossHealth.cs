@@ -4,12 +4,13 @@ using System.Collections;
 
 public class BossHealth : MonoBehaviour
 {
-    private Animator anim;
+    public Animator anim;
+    public SpriteRenderer spriteRenderer;
+
     private Rigidbody2D rb;
     [Header("Boss health settings")]
-    public int maxHealth = 3;
+    public int maxHealth;
     public int currentHealth;
-    private SpriteRenderer spriteRenderer;
     private Color ogColor;
     private bool isDead = false;
     public Slider healthBar;
@@ -17,23 +18,28 @@ public class BossHealth : MonoBehaviour
     void Start()
     {
         currentHealth = maxHealth;
-        spriteRenderer = GetComponent<SpriteRenderer>();
+        spriteRenderer = GetComponentInChildren<SpriteRenderer>();
         ogColor = spriteRenderer.color;
+        // Auto-find Animator if not assigned
         anim = GetComponent<Animator>();
-        rb = GetComponent<Rigidbody2D>(); 
+        if (anim == null)
+        {
+            anim = GetComponentInChildren<Animator>();
+        }
+        rb = GetComponent<Rigidbody2D>();
     }
 
     void Update()
     {
-        healthBar.value =  currentHealth;
+        healthBar.value = currentHealth;
     }
 
     public void TakeDamage(int damage)
     {
-        if (isDead) return; 
-        
+        if (isDead) return;
+
         currentHealth -= damage;
-        StartCoroutine(Flash());     
+        StartCoroutine(Flash());
         if (currentHealth <= 0)
         {
             Die();
@@ -43,7 +49,6 @@ public class BossHealth : MonoBehaviour
     {
         if (isDead) return;
         isDead = true;
-        
         if (anim != null)
         {
             anim.SetTrigger("die");
@@ -65,7 +70,7 @@ public class BossHealth : MonoBehaviour
             yield return new WaitForSeconds(0.15f);
             spriteRenderer.color = ogColor;
             yield return new WaitForSeconds(0.1f);
-        
+
             spriteRenderer.color = Color.red;
             yield return new WaitForSeconds(0.15f);
             spriteRenderer.color = ogColor;
