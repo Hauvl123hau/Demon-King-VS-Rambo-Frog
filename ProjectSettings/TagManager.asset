@@ -21,7 +21,7 @@ TagManager:
   - Effect
   - Player
   - Boss
-  - 
+  - Oneway
   - 
   - 
   - 
@@ -52,6 +52,9 @@ TagManager:
     locked: 0
   - name: Ground
     uniqueID: 951020573
+    locked: 0
+  - name: oneway
+    uniqueID: 4139515375
     locked: 0
   - name: ForeGround
     uniqueID: 3568487297
