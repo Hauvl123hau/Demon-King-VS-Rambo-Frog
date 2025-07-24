@@ -1,5 +1,36 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
+--- !u!1 &602937088354944025
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 3015443040557819805}
+  m_Layer: 0
+  m_Name: ShootPoint
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 0
+--- !u!4 &3015443040557819805
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 602937088354944025}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: -1.48, y: 1.04, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1268195172147793145}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &636612695269640871
 GameObject:
   m_ObjectHideFlags: 0
@@ -15,6 +46,7 @@ GameObject:
   - component: {fileID: 4075171690647664804}
   - component: {fileID: 1337278770286627758}
   - component: {fileID: 1637989403406071133}
+  - component: {fileID: 5349527856788551615}
   m_Layer: 0
   m_Name: BossDragonKnight
   m_TagString: Enemy
@@ -32,12 +64,13 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 19.06, y: -0.05, z: 0}
-  m_LocalScale: {x: 2, y: 2, z: 1}
+  m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 1268195172147793145}
   - {fileID: 3808359028868253839}
   - {fileID: 9193342972787834232}
+  - {fileID: 855179696192778926}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!50 &8734231491307200657
@@ -97,11 +130,11 @@ BoxCollider2D:
   m_CallbackLayers:
     serializedVersion: 2
     m_Bits: 4294967295
-  m_IsTrigger: 1
+  m_IsTrigger: 0
   m_UsedByEffector: 0
   m_CompositeOperation: 0
   m_CompositeOrder: 0
-  m_Offset: {x: -2.6077833, y: 1.0158023}
+  m_Offset: {x: -0.027647495, y: 0.22768831}
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
     pivot: {x: 1, y: 0}
@@ -111,7 +144,7 @@ BoxCollider2D:
     drawMode: 0
     adaptiveTiling: 0
   m_AutoTiling: 0
-  m_Size: {x: 1.2420864, y: 2.1032946}
+  m_Size: {x: 1.0732031, y: 2.1032948}
   m_EdgeRadius: 0
 --- !u!114 &6546094857245659982
 MonoBehaviour:
@@ -145,10 +178,12 @@ MonoBehaviour:
   raycastOrigin: {fileID: 3808359028868253839}
   dashAttack: {fileID: 1337278770286627758}
   chaseAttack: {fileID: 1637989403406071133}
-  isAttacking: 0
+  shootFireballs: {fileID: 5349527856788551615}
+  dashAttackOn: 0
+  chaseAttackOn: 0
+  shootFireballsOn: 0
   idleDuration: 1
   stateTimer: 0
-  meleeAttackRange: 4
   dashFireComboRange: 10
   obstacleLayerMask:
     serializedVersion: 2
@@ -156,7 +191,9 @@ MonoBehaviour:
   playerLayer:
     serializedVersion: 2
     m_Bits: 512
-  dashCooldown: 3
+  chaseAttackDuration: 5
+  maxFireballShots: 3
+  fireballAttackDuration: 3
 --- !u!114 &1337278770286627758
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -177,12 +214,6 @@ MonoBehaviour:
   dashCooldown: 3
   fireBreathDelay: 0.2
   raycastOrigin: {fileID: 3808359028868253839}
-  obstacleLayerMask:
-    serializedVersion: 2
-    m_Bits: 4294967295
-  playerLayer:
-    serializedVersion: 2
-    m_Bits: 1
 --- !u!114 &1637989403406071133
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -200,15 +231,57 @@ MonoBehaviour:
   raycastOrigin: {fileID: 3808359028868253839}
   chaseSpeed: 3
   meleeAttackRange: 4
-  maxChaseDistance: 15
   stopDistance: 0.5
   attackCooldown: 1.5
-  obstacleLayerMask:
-    serializedVersion: 2
-    m_Bits: 4294967295
-  playerLayer:
-    serializedVersion: 2
-    m_Bits: 512
+--- !u!114 &5349527856788551615
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 636612695269640871}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9ff64497839fbb149a111c4363d23217, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  anim: {fileID: 8728874339474883746}
+  player: {fileID: 0}
+  fireballPrefab: {fileID: 7795502910542421680, guid: cd4c68e99b619714089d9ec5cc5218fc, type: 3}
+  firePoint: {fileID: 3015443040557819805}
+  fireballSpeed: 10
+  attackCooldown: 2
+--- !u!1 &640568766418861245
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 855179696192778926}
+  m_Layer: 0
+  m_Name: DashEffectPoint
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &855179696192778926
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 640568766418861245}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 1, z: 0, w: 0}
+  m_LocalPosition: {x: -2.97, y: -0.01999998, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 7546299060109917125}
+  m_LocalEulerAnglesHint: {x: 0, y: 180, z: 0}
 --- !u!1 &785489663746601700
 GameObject:
   m_ObjectHideFlags: 0
@@ -234,7 +307,7 @@ Transform:
   m_GameObject: {fileID: 785489663746601700}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -2.65, y: 0.69, z: 0}
+  m_LocalPosition: {x: -0.06, y: 0.01, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -634,12 +707,13 @@ Transform:
   m_GameObject: {fileID: 4265223679887155152}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalPosition: {x: 2.61, y: -0.81, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 999790831933539858}
   - {fileID: 5159310794454360454}
+  - {fileID: 3015443040557819805}
   m_Father: {fileID: 7546299060109917125}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!212 &453851696546137136

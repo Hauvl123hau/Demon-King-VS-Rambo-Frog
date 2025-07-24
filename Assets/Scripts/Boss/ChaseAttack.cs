@@ -7,11 +7,11 @@ public class ChaseAttack : MonoBehaviour
     public Animator anim;
     public Transform player;
     public Transform raycastOrigin;
+    private BossController bossController; // Reference để sử dụng utility methods
     
     [Header("Chase Settings")]
     public float chaseSpeed = 3f;
     public float meleeAttackRange = 4f;
-    public float maxChaseDistance = 15f; // Khoảng cách tối đa để đuổi theo
     public float stopDistance = 0.5f; // Khoảng cách dừng lại để tránh va chạm
     
     [Header("Attack Settings")]
@@ -29,13 +29,28 @@ public class ChaseAttack : MonoBehaviour
     private bool isPerformingChaseAttack = false;
     private bool isAttacking = false;
     private Vector3 originalScale;
+    private float chaseStartTime; // Thời điểm bắt đầu đuổi theo
     
     public bool IsPerformingChaseAttack => isPerformingChaseAttack;
+    
+    // Method để BossController kiểm tra thời gian đã trôi qua
+    public float GetElapsedTime()
+    {
+        if (!isPerformingChaseAttack) return 0f;
+        return Time.time - chaseStartTime;
+    }
     
     private void Start()
     {
         // Lưu scale gốc
         originalScale = transform.localScale;
+        
+        // Tìm BossController reference
+        bossController = GetComponent<BossController>();
+        if (bossController == null)
+        {
+            Debug.LogError("ChaseAttack: Không tìm thấy BossController component!");
+        }
         
         // Auto-find components if not assigned
         if (anim == null)
@@ -68,13 +83,23 @@ public class ChaseAttack : MonoBehaviour
         
         player = targetPlayer;
         isPerformingChaseAttack = true;
-        Debug.Log("Boss bắt đầu đuổi theo và tấn công cận chiến!");
+        chaseStartTime = Time.time; // Ghi lại thời điểm bắt đầu
+        float distance = bossController != null ? bossController.GetDistanceToPlayer() : Vector3.Distance(raycastOrigin.position, player.position);
+        Debug.Log($"Boss bắt đầu đuổi theo và tấn công cận chiến! Distance to player: {distance:F2}");
     }
     
     public void StopChaseAttack()
     {
         isPerformingChaseAttack = false;
         isAttacking = false;
+        
+        // Reset animation parameters khi dừng chase
+        if (anim != null)
+        {
+            anim.SetBool("isChasing", false);
+            anim.SetBool("isAttacking", false);
+        }
+        
         Debug.Log("Boss dừng đuổi theo!");
         OnChaseAttackComplete?.Invoke();
     }
@@ -83,17 +108,15 @@ public class ChaseAttack : MonoBehaviour
     {
         if (!isPerformingChaseAttack || player == null) return;
         
-        float distanceToPlayer = GetDistanceToPlayer();
+        // Sử dụng BossController để tính khoảng cách (nếu có), nếu không thì tính trực tiếp
+        float distanceToPlayer = bossController != null ? bossController.GetDistanceToPlayer() : Vector3.Distance(raycastOrigin.position, player.position);
+        float elapsedTime = Time.time - chaseStartTime;
         
-        // Kiểm tra xem player có quá xa không
-        if (distanceToPlayer > maxChaseDistance || !CanSeePlayer())
+        // Debug thông tin mỗi frame
+        if (Time.frameCount % 60 == 0) // Log mỗi giây
         {
-            StopChaseAttack();
-            return;
+            Debug.Log($"Chase Update - Distance: {distanceToPlayer:F2}, Elapsed: {elapsedTime:F2}s, IsAttacking: {isAttacking}");
         }
-        
-        // Quay mặt về phía player
-        FacePlayer();
         
         // Kiểm tra khoảng cách để tấn công
         if (distanceToPlayer <= meleeAttackRange && !isAttacking)
@@ -104,10 +127,13 @@ public class ChaseAttack : MonoBehaviour
                 PerformMeleeAttack();
             }
         }
-        else if (distanceToPlayer > meleeAttackRange + stopDistance && !isAttacking)
+        else if (!isAttacking)
         {
-            // Ngoài tầm tấn công - di chuyển đến gần player
-            ChasePlayer();
+            // Ngoài tầm tấn công - di chuyển đến gần player (nhưng không quá gần)
+            if (distanceToPlayer > stopDistance)
+            {
+                ChasePlayer();
+            }
         }
         
         // Cập nhật animation parameters
@@ -118,8 +144,10 @@ public class ChaseAttack : MonoBehaviour
     {
         Vector3 directionToPlayer = (player.position - transform.position).normalized;
         
-        // Di chuyển về phía player
+        // Di chuyển về phía player - BossController sẽ lo việc quay mặt
         transform.position += directionToPlayer * chaseSpeed * Time.deltaTime;
+        float distance = bossController != null ? bossController.GetDistanceToPlayer() : Vector3.Distance(raycastOrigin.position, player.position);
+        Debug.Log($"Boss đang chase player. Distance: {distance:F2}");
     }
     
     private void PerformMeleeAttack()
@@ -137,33 +165,11 @@ public class ChaseAttack : MonoBehaviour
         }
     }
     
-    private void FacePlayer()
-    {
-        if (player == null) return;
-        
-        Vector3 directionToPlayer = (player.position - transform.position).normalized;
-        
-        if (directionToPlayer.x > 0)
-        {
-            // Player ở bên phải
-            transform.localScale = new Vector3(Mathf.Abs(originalScale.x), originalScale.y, originalScale.z);
-        }
-        else if (directionToPlayer.x < 0)
-        {
-            // Player ở bên trái
-            transform.localScale = new Vector3(-Mathf.Abs(originalScale.x), originalScale.y, originalScale.z);
-        }
-    }
-    
-    private float GetDistanceToPlayer()
-    {
-        return Vector3.Distance(raycastOrigin.position, player.position);
-    }
     
     private bool CanSeePlayer()
     {
         Vector3 directionToPlayer = (player.position - raycastOrigin.position).normalized;
-        float distanceToPlayer = GetDistanceToPlayer();
+        float distanceToPlayer = Vector3.Distance(raycastOrigin.position, player.position);
         
         RaycastHit hit;
         if (Physics.Raycast(raycastOrigin.position, directionToPlayer, out hit, distanceToPlayer, obstacleLayerMask))
@@ -200,7 +206,8 @@ public class ChaseAttack : MonoBehaviour
         }
         
         // Kiểm tra xem có nên tiếp tục đuổi theo không
-        if (isPerformingChaseAttack && GetDistanceToPlayer() > meleeAttackRange)
+        float distance = bossController != null ? bossController.GetDistanceToPlayer() : Vector3.Distance(raycastOrigin.position, player.position);
+        if (isPerformingChaseAttack && distance > meleeAttackRange)
         {
             // Tiếp tục đuổi theo nếu player vẫn trong tầm
             Debug.Log("Tiếp tục đuổi theo player...");
@@ -216,14 +223,11 @@ public class ChaseAttack : MonoBehaviour
         Gizmos.color = Color.red;
         Gizmos.DrawWireSphere(raycastOrigin.position, meleeAttackRange);
         
-        // Vẽ vòng tròn đuổi theo tối đa
-        Gizmos.color = new Color(1f, 0.5f, 0f, 1f); // Orange color
-        Gizmos.DrawWireSphere(raycastOrigin.position, maxChaseDistance);
-        
         // Vẽ raycast đến player
         if (player != null && isPerformingChaseAttack)
         {
-            Gizmos.color = CanSeePlayer() ? Color.green : Color.red;
+            bool canSee = bossController != null ? bossController.CanSeePlayer() : CanSeePlayer();
+            Gizmos.color = canSee ? Color.green : Color.red;
             Gizmos.DrawLine(raycastOrigin.position, player.position);
         }
     }

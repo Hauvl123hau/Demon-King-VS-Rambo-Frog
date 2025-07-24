@@ -5,30 +5,27 @@ public class BossAnimationEvents : MonoBehaviour
     private BossController bossController;
     private DashAttack dashAttack;
     private ChaseAttack chaseAttack;
+    private ShootFireballsAttack shootFireballsAttack;
 
     private void Awake()
     {
         bossController = GetComponentInParent<BossController>();
         dashAttack = GetComponentInParent<DashAttack>();
         chaseAttack = GetComponentInParent<ChaseAttack>();
+        shootFireballsAttack = GetComponentInParent<ShootFireballsAttack>();
     }
 
-    // Animation Event: Được gọi khi melee attack animation kết thúc
-    private void EndAttack()
+    // Animation Event: Được gọi khi melee attack animation kết thúc (cho ChaseAttack)
+    private void EndMeleeAttack()
     {
-        // Kiểm tra xem attack này thuộc về BossController hay ChaseAttack
-        if (chaseAttack != null && chaseAttack.IsPerformingChaseAttack)
+        if (chaseAttack != null)
         {
-            // Đây là attack từ ChaseAttack
             chaseAttack.EndMeleeAttack();
-        }
-        else if (bossController != null)
-        {
-            // Đây là attack từ BossController (legacy)
-            bossController.EndAttack();
+            Debug.Log("Animation Event: Melee Attack kết thúc!");
         }
     }
-    
+
+
     // Animation Event: Được gọi khi prepare dash animation hoàn thành và sẵn sàng bắt đầu dash
     private void StartDash()
     {
@@ -36,12 +33,26 @@ public class BossAnimationEvents : MonoBehaviour
         // Animation event này có thể được sử dụng để trigger effects hoặc sounds
         Debug.Log("Animation Event: Dash bắt đầu!");
     }
-    
+
     // Animation Event: Được gọi khi fire breath animation hoàn thành
     private void EndFireBreath()
     {
         // Chỉ cần để trống vì DashAttack sẽ tự xử lý end fire breath
         // Animation event này có thể được sử dụng để trigger effects hoặc sounds
         Debug.Log("Animation Event: Fire breath kết thúc!");
+    }
+
+    private void ShootFireball()
+    {
+        ShootFireballsAttack shootFireballs = GetComponentInParent<ShootFireballsAttack>();
+        if (shootFireballs != null)
+        {
+            shootFireballs.ShootFireball();
+            Debug.Log("Animation Event: Boss bắn fireball!");
+        }
+        else
+        {
+            Debug.LogWarning("ShootFireballsAttack component không tìm thấy!");
+        }
     }
 }

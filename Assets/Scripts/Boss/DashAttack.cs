@@ -6,6 +6,7 @@ public class DashAttack : MonoBehaviour
     [Header("References")]
     public Animator anim;
     public Transform player;
+    private BossController bossController; // Reference để sử dụng utility methods
     
     [Header("Dash Settings")]
     public float dashSpeed = 15f;
@@ -34,6 +35,13 @@ public class DashAttack : MonoBehaviour
     {
         originalScale = transform.localScale;
         
+        // Tìm BossController reference
+        bossController = GetComponent<BossController>();
+        if (bossController == null)
+        {
+            Debug.LogError("DashAttack: Không tìm thấy BossController component!");
+        }
+        
         // Nếu không có raycastOrigin, sử dụng transform của boss
         if (raycastOrigin == null)
         {
@@ -52,20 +60,14 @@ public class DashAttack : MonoBehaviour
         }
     }
     
-    // === RAYCAST METHODS ===
+    // === ATTACK LOGIC ===
     private bool IsPlayerInFireBreathRange()
     {
         if (player == null) return false;
         
-        float distanceToPlayer = GetDistanceToPlayer();
-        return distanceToPlayer <= fireBreathRange && CanSeePlayer();
-    }
-    
-    private float GetDistanceToPlayer()
-    {
-        if (player == null) return float.MaxValue;
-        // Tính khoảng cách từ raycastOrigin đến player
-        return Vector3.Distance(raycastOrigin.position, player.position);
+        float distanceToPlayer = bossController != null ? bossController.GetDistanceToPlayer() : Vector3.Distance(raycastOrigin.position, player.position);
+        bool canSee = bossController != null ? bossController.CanSeePlayer() : CanSeePlayer();
+        return distanceToPlayer <= fireBreathRange && canSee;
     }
     
     private bool CanSeePlayer()
@@ -73,7 +75,7 @@ public class DashAttack : MonoBehaviour
         if (player == null) return false;
         
         Vector3 directionToPlayer = (player.position - raycastOrigin.position).normalized;
-        float distanceToPlayer = GetDistanceToPlayer();
+        float distanceToPlayer = Vector3.Distance(raycastOrigin.position, player.position);
         
         // Raycast từ raycastOrigin đến player
         RaycastHit hit;
@@ -128,7 +130,7 @@ public class DashAttack : MonoBehaviour
         
         // Tính toán điểm đích dash (dừng ở khoảng cách fireBreathRange)
         Vector3 directionToPlayer = (player.position - transform.position).normalized;
-        float distanceToPlayer = GetDistanceToPlayer();
+        float distanceToPlayer = bossController != null ? bossController.GetDistanceToPlayer() : Vector3.Distance(raycastOrigin.position, player.position);
         
         // Tính điểm đích để dừng ở khoảng cách fireBreathRange
         float dashDistance = distanceToPlayer - fireBreathRange;
@@ -207,11 +209,14 @@ public class DashAttack : MonoBehaviour
         FaceTarget(player.position);
         
         // Kiểm tra xem có thể nhìn thấy player để phun lửa không
-        if (!CanSeePlayer())
+        bool canSee = bossController != null ? bossController.CanSeePlayer() : CanSeePlayer();
+        float distance = bossController != null ? bossController.GetDistanceToPlayer() : Vector3.Distance(raycastOrigin.position, player.position);
+        
+        if (!canSee)
         {
             Debug.Log("Dash Attack: Không thể nhìn thấy player, bỏ qua fire breath!");
         }
-        else if (GetDistanceToPlayer() > fireBreathRange)
+        else if (distance > fireBreathRange)
         {
             Debug.Log("Dash Attack: Player quá xa để phun lửa!");
         }
@@ -301,7 +306,8 @@ public class DashAttack : MonoBehaviour
         // Vẽ raycast đến player nếu có
         if (player != null)
         {
-            Gizmos.color = CanSeePlayer() ? Color.green : Color.yellow;
+            bool canSee = bossController != null ? bossController.CanSeePlayer() : CanSeePlayer();
+            Gizmos.color = canSee ? Color.green : Color.yellow;
             Gizmos.DrawLine(raycastOrigin.position, player.position);
             
             // Vẽ điểm xuất phát raycast

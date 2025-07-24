@@ -9,17 +9,19 @@ public class BossController : MonoBehaviour
     public Transform raycastOrigin; // Empty object để làm điểm xuất phát raycast
     public DashAttack dashAttack; // Reference đến DashAttack component
     public ChaseAttack chaseAttack; // Reference đến ChaseAttack component
-    public bool isAttacking = false;
+    public ShootFireballsAttack shootFireballs; // Reference đến ShootFireballsAttack component
     
     [Header("Attack Settings")]
     public bool dashAttackOn = false; 
     public bool chaseAttackOn = false; 
+    public bool shootFireballsOn = false; 
 
     private enum BossState
     {
         Idle,
         DashFireCombo,
-        ChaseAttack
+        ChaseAttack,
+        ShootFireballs
     }
     private BossState currentState = BossState.Idle;
 
@@ -27,18 +29,21 @@ public class BossController : MonoBehaviour
     public float idleDuration = 1f;
     public float stateTimer;
     
-    [Header("Attack Pattern")]
-    private bool useFireBreathNext = false;
-    
     [Header("Distance-Based Attacks")]
-    public float meleeAttackRange = 4f;        // Khoảng cách tấn công cận chiến (chase attack)
     public float dashFireComboRange = 10f;     // Khoảng cách để thực hiện combo dash + fire
     public LayerMask obstacleLayerMask = ~0;   // Layer của vật cản (tất cả trừ player)
     public LayerMask playerLayer = 1;          // Layer của player
     
-    [Header("Dash Settings")]
-    public float dashCooldown = 3f;            // Thời gian cooldown giữa các combo
+    [Header("Chase Attack Settings")]
+    public float chaseAttackDuration = 5f;     // Thời gian chase attack diễn ra
+    
     private Vector3 originalScale;             // Scale gốc của boss
+
+    [Header("Fireball Attack Settings")]
+    public int maxFireballShots = 3;
+    private int fireballShotsCount = 0;
+    public float fireballAttackDuration = 3f; // Thời gian tối đa cho đợt bắn fireball (tuỳ chọn)
+    private float fireballAttackTimer = 0f;
     
     private void Start()
     {
@@ -114,35 +119,54 @@ public class BossController : MonoBehaviour
             dashAttack.raycastOrigin = raycastOrigin; // Sử dụng cùng raycastOrigin
             dashAttack.obstacleLayerMask = obstacleLayerMask; // Sử dụng cùng obstacle layer mask
             dashAttack.playerLayer = playerLayer; // Sử dụng cùng player layer
-            
             // Subscribe to event
             dashAttack.OnComboComplete += OnDashFireComboComplete;
         }
-        
+
         // Thiết lập ChaseAttack (chỉ khi được bật)
         if (chaseAttackOn && chaseAttack != null)
         {
             chaseAttack.anim = anim;
             chaseAttack.player = player;
-            chaseAttack.meleeAttackRange = meleeAttackRange;
             chaseAttack.raycastOrigin = raycastOrigin;
-            chaseAttack.obstacleLayerMask = obstacleLayerMask;
-            chaseAttack.playerLayer = playerLayer;
-            
             // Subscribe to event
             chaseAttack.OnChaseAttackComplete += OnChaseAttackComplete;
+        }
+
+        // Thiết lập ShootFireballsAttack (chỉ khi được bật)
+        if (shootFireballsOn && shootFireballs != null)
+        {
+            shootFireballs.anim = anim;
+            shootFireballs.player = player;
+            // Nếu chưa có firePoint, dùng raycastOrigin hoặc transform
+            if (shootFireballs.firePoint == null)
+            {
+                shootFireballs.firePoint = raycastOrigin != null ? raycastOrigin : transform;
+            }
         }
     }
 
     private void Update()
     {
-        // Boss luôn quay mặt về phía player (trừ khi đang thực hiện combo hoặc chase)
-        if (player != null && currentState != BossState.DashFireCombo && currentState != BossState.ChaseAttack)
+        // Boss luôn quay mặt về phía player (bao gồm cả khi đang chase attack)
+        if (player != null && currentState != BossState.DashFireCombo)
         {
             FacePlayer();
         }
 
-        if (isAttacking || (dashAttackOn && dashAttack?.IsPerformingCombo == true) || (chaseAttackOn && chaseAttack?.IsPerformingChaseAttack == true)) return;
+        // Kiểm tra các điều kiện chặn update (an toàn hơn)
+        bool isDashAttacking = dashAttackOn && dashAttack != null && dashAttack.IsPerformingCombo;
+        bool isChaseAttacking = chaseAttackOn && chaseAttack != null && chaseAttack.IsPerformingChaseAttack;
+        
+        if (isDashAttacking || isChaseAttacking) 
+        {
+            // Debug log để theo dõi trạng thái
+            if (Time.frameCount % 120 == 0) // Log mỗi 2 giây
+            {
+                Debug.Log($"Update blocked - isDashAttacking: {isDashAttacking}, isChaseAttacking: {isChaseAttacking}");
+            }
+            return;
+        }
 
         stateTimer -= Time.deltaTime;
         
@@ -160,12 +184,69 @@ public class BossController : MonoBehaviour
                 break;
                 
             case BossState.ChaseAttack:
-                // ChaseAttack component sẽ tự xử lý, chỉ cần đợi nó hoàn thành
+                // Kiểm tra thời gian chase attack và dừng nếu hết thời gian
+                if (chaseAttack != null && chaseAttack.IsPerformingChaseAttack)
+                {
+                    float elapsedTime = chaseAttack.GetElapsedTime();
+                    if (elapsedTime >= chaseAttackDuration)
+                    {
+                        Debug.Log($"Chase Attack timeout từ BossController! Elapsed: {elapsedTime:F2}s >= {chaseAttackDuration}s");
+                        chaseAttack.StopChaseAttack();
+                    }
+                }
+                break;
+
+            case BossState.ShootFireballs:
+                // Kiểm soát số lần bắn fireball
+                fireballAttackTimer += Time.deltaTime;
+                if (fireballShotsCount < maxFireballShots)
+                {
+                    if (shootFireballs != null)
+                    {
+                        shootFireballs.ShootFireball();
+                        fireballShotsCount++;
+                        Debug.Log($"Boss bắn fireball số {fireballShotsCount}/{maxFireballShots}");
+                    }
+                }
+                else
+                {
+                    Debug.Log("Boss đã bắn đủ số fireball, chuyển về Idle");
+                    currentState = BossState.Idle;
+                    stateTimer = idleDuration;
+                }
                 break;
         }
     }
     
-    void FacePlayer()
+    // === UTILITY METHODS (dùng chung cho tất cả attack types) ===
+    
+    public float GetDistanceToPlayer()
+    {
+        // Tính khoảng cách từ raycastOrigin đến player
+        return Vector3.Distance(raycastOrigin.position, player.position);
+    }
+    
+    public bool CanSeePlayer()
+    {
+        Vector3 directionToPlayer = (player.position - raycastOrigin.position).normalized;
+        float distanceToPlayer = GetDistanceToPlayer();
+        
+        // Raycast từ raycastOrigin đến player, chỉ kiểm tra obstacles (loại trừ player layer)
+        int obstacleOnlyMask = obstacleLayerMask & ~playerLayer;
+        RaycastHit hit;
+        
+        if (Physics.Raycast(raycastOrigin.position, directionToPlayer, out hit, distanceToPlayer, obstacleOnlyMask))
+        {
+            // Có vật cản giữa boss và player
+            Debug.Log($"CanSeePlayer: Có vật cản {hit.collider.name} giữa boss và player");
+            return false;
+        }
+        
+        // Không có vật cản, boss có thể nhìn thấy player
+        return true;
+    }
+    
+    public void FacePlayer()
     {
         if (player == null) return;
         
@@ -184,75 +265,63 @@ public class BossController : MonoBehaviour
             transform.localScale = new Vector3(-Mathf.Abs(originalScale.x), originalScale.y, originalScale.z);
         }
     }
-
+    
+    // === ATTACK DECISION LOGIC ===
+    
     void ChooseAttackByDistance()
     {
         if (player == null) return;
         
         float distanceToPlayer = GetDistanceToPlayer();
+        bool canSeePlayer = CanSeePlayer();
+        
+        Debug.Log($"ChooseAttackByDistance: Distance={distanceToPlayer:F2}, CanSee={canSeePlayer}, ChaseAttackOn={chaseAttackOn}, DashAttackOn={dashAttackOn}");
         
         // Kiểm tra xem có thể "nhìn thấy" player không
-        if (CanSeePlayer())
+        if (canSeePlayer)
         {
             // Ưu tiên theo khoảng cách và kiểu tấn công được bật
-            if (distanceToPlayer <= meleeAttackRange && chaseAttackOn)
+            if (shootFireballsOn && shootFireballs != null)
             {
-                // Tấn công cận chiến bằng chase attack (nếu được bật)
-                TriggerChaseAttack();
-                currentState = BossState.ChaseAttack;
+                Debug.Log("Triggering ShootFireballs!");
+                TriggerShootFireballs();
+                currentState = BossState.ShootFireballs;
             }
-            else if (distanceToPlayer <= dashFireComboRange && dashAttackOn && dashAttack.CanPerformDashAttack())
+            else if (distanceToPlayer <= dashFireComboRange && dashAttackOn && dashAttack != null && dashAttack.CanPerformDashAttack())
             {
-                // Thực hiện combo dash + fire breath (nếu được bật)
+                Debug.Log($"Triggering DashFireCombo - Distance: {distanceToPlayer:F2} <= {dashFireComboRange}");
                 TriggerDashFireCombo();
                 currentState = BossState.DashFireCombo;
             }
-            else if (distanceToPlayer <= meleeAttackRange && !chaseAttackOn)
+            else if (chaseAttackOn && chaseAttack != null)
             {
-                // Fallback: sử dụng melee attack cũ nếu chase attack bị tắt
-                TriggerMeleeAttack();
-                currentState = BossState.Idle; // Sẽ quay về idle sau khi attack xong
+                Debug.Log($"Triggering ChaseAttack - Distance: {distanceToPlayer:F2}");
+                TriggerChaseAttack();
+                currentState = BossState.ChaseAttack;
             }
             else
             {
-                // Player quá xa hoặc không có attack nào được bật, quay về idle
+                Debug.Log("No attack triggered - returning to idle");
                 stateTimer = idleDuration;
             }
         }
         else
         {
-            // Không thể nhìn thấy player, quay về idle
-            stateTimer = idleDuration;
-        }
-    }
-    
-    float GetDistanceToPlayer()
-    {
-        // Tính khoảng cách từ raycastOrigin đến player
-        return Vector3.Distance(raycastOrigin.position, player.position);
-    }
-    
-    bool CanSeePlayer()
-    {
-        Vector3 directionToPlayer = (player.position - raycastOrigin.position).normalized;
-        float distanceToPlayer = GetDistanceToPlayer();
-        
-        // Raycast từ raycastOrigin đến player
-        RaycastHit hit;
-        if (Physics.Raycast(raycastOrigin.position, directionToPlayer, out hit, distanceToPlayer, obstacleLayerMask))
-        {
-            // Kiểm tra xem raycast có trúng player không
-            if (hit.collider.CompareTag("Player"))
+            // Không thể nhìn thấy player
+            if (chaseAttackOn && chaseAttack != null)
             {
-                return true; // Nhìn thấy player
+                // Vẫn thử chase attack để tìm player
+                Debug.Log("Cannot see player - triggering ChaseAttack to find player");
+                TriggerChaseAttack();
+                currentState = BossState.ChaseAttack;
             }
             else
             {
-                return false; // Có vật cản
+                // Không có chase attack, quay về idle
+                Debug.Log("Cannot see player and no chase attack - returning to idle");
+                stateTimer = idleDuration;
             }
         }
-        
-        return true; // Không có vật cản nào
     }
     
     // Vẽ debug gizmos để visualize các khoảng cách
@@ -261,10 +330,10 @@ public class BossController : MonoBehaviour
         if (raycastOrigin == null) return;
         
         // Vẽ vòng tròn tấn công cận chiến (chase attack) - chỉ khi được bật
-        if (chaseAttackOn)
+        if (chaseAttackOn && chaseAttack != null)
         {
             Gizmos.color = Color.red;
-            Gizmos.DrawWireSphere(raycastOrigin.position, meleeAttackRange);
+            Gizmos.DrawWireSphere(raycastOrigin.position, chaseAttack.meleeAttackRange);
         }
         
         // Vẽ vòng tròn dash fire combo - chỉ khi được bật
@@ -287,15 +356,44 @@ public class BossController : MonoBehaviour
     }
 
     // === CHASE ATTACK METHODS ===
+    // === SHOOT FIREBALLS ATTACK METHODS ===
+    public void TriggerShootFireballs()
+    {
+        if (!shootFireballsOn || shootFireballs == null)
+        {
+            Debug.LogWarning($"TriggerShootFireballs failed - shootFireballsOn: {shootFireballsOn}, shootFireballs: {shootFireballs}");
+            return;
+        }
+        Debug.Log($"Boss bắt đầu bắn fireball tối đa {maxFireballShots} lần!");
+        fireballShotsCount = 0;
+        fireballAttackTimer = 0f;
+        // Nếu muốn delay giữa các lần bắn, có thể dùng Coroutine hoặc thêm cooldown logic
+    }
     public void TriggerChaseAttack()
     {
-        if (!chaseAttackOn || chaseAttack == null) return;
+        if (!chaseAttackOn || chaseAttack == null) 
+        {
+            Debug.LogWarning($"TriggerChaseAttack failed - chaseAttackOn: {chaseAttackOn}, chaseAttack: {chaseAttack}");
+            return;
+        }
         
-        Debug.Log("Boss bắt đầu đuổi theo và tấn công cận chiến!");
+        Debug.Log($"Boss bắt đầu đuổi theo và tấn công cận chiến trong {chaseAttackDuration} giây!");
         currentState = BossState.ChaseAttack;
         
         // Gọi ChaseAttack component để thực hiện chase attack
         chaseAttack.StartChaseAttack(player);
+    }
+    
+    // Method để thay đổi chase attack duration từ bên ngoài
+    public void SetChaseAttackDuration(float newDuration)
+    {
+        chaseAttackDuration = Mathf.Max(0.1f, newDuration); // Đảm bảo duration >= 0.1s
+    }
+    
+    // Getter để lấy chase attack duration hiện tại
+    public float GetChaseAttackDuration()
+    {
+        return chaseAttackDuration;
     }
     
     private void OnChaseAttackComplete()
@@ -305,35 +403,6 @@ public class BossController : MonoBehaviour
         stateTimer = idleDuration;
     }
 
-    // === LEGACY MELEE ATTACK METHODS (giữ lại để tương thích) ===
-
-    public void TriggerMeleeAttack()
-    {
-        Debug.Log("TriggerMeleeAttack() được gọi!");
-        isAttacking = true;
-        anim.SetBool("isAttacking", true);
-        anim.SetTrigger("attack");
-        Debug.Log("Đã set trigger 'attack'");
-    }
-    
-    // Giữ lại method cũ để tương thích
-    public void TriggerAttack()
-    {
-        TriggerMeleeAttack();
-    }
-
-    public void EndAttack()
-    {
-        Debug.Log("EndAttack() trong BossController được gọi!");
-        isAttacking = false;
-        anim.SetBool("isAttacking", false);
-        anim.SetBool("isPreparingDash", false);
-        anim.SetBool("isDashing", false);
-        currentState = BossState.Idle;
-        stateTimer = idleDuration;
-        Debug.Log("Boss quay về Idle, timer = " + stateTimer);
-    }
-    
     // === DASH FIRE COMBO METHODS ===
     public void TriggerDashFireCombo()
     {
