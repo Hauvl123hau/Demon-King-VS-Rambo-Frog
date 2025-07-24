@@ -11,14 +11,12 @@ public class BulletUI : MonoBehaviour
     private List<Image> bullets = new List<Image>();
     public void SetMaxBullets(int maxBullets)
     {
-        // Clear existing bullets
         foreach (var bullet in bullets)
         {
             Destroy(bullet.gameObject);
         }
         bullets.Clear();
 
-        // Create new bullets
         for (int i = 0; i < maxBullets; i++)
         {
             Image newBullet = Instantiate(bulletImage, transform);
@@ -32,7 +30,6 @@ public class BulletUI : MonoBehaviour
     {
         for (int i = 0; i < bullets.Count; i++)
         {
-            // Tính toán từ bên phải: viên đạn sẽ biến mất từ trái qua phải
             int rightIndex = bullets.Count - 1 - i;
             if (rightIndex < currentBullets)
             {

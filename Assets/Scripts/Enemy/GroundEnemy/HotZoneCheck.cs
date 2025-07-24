@@ -36,8 +36,8 @@ public class HotZoneCheck : MonoBehaviour
             gameObject.SetActive(false);
             enemyParent.triggerZone.SetActive(true);
             enemyParent.inRange = false;
-            enemyParent.target = null;  // Clear the player target
-            enemyParent.SelectTarget();  // Select a new patrol point target
+            enemyParent.target = null; 
+            enemyParent.SelectTarget();  
         }
     }
 }

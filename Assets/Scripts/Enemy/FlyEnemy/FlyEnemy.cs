@@ -30,22 +30,19 @@ public class FlyEnemy : MonoBehaviour
     private Animator anim;
     private Rigidbody2D rb;
 
-    // Biến cho patrol
     private Vector3 currentTarget;
 
-    // Biến cho attack
     private bool isAttacking = false;
-    private bool isPerformingAttack = false; // Biến mới để kiểm soát việc lao vào
+    private bool isPerformingAttack = false; 
     private float lastAttackTime = 0f;
     private Vector3 attackTarget;
-    private bool hasDealtDamage = false; // Biến để đảm bảo chỉ gây sát thương một lần mỗi lần tấn công
+    private bool hasDealtDamage = false; 
 
     private void Awake()
     {
         player = GameObject.FindGameObjectWithTag("Player");
         anim = GetComponent<Animator>();
 
-        // Thiết lập điểm patrol đầu tiên
         if (patrolPoints.Length > 0)
         {
             currentTarget = patrolPoints[currentPatrolIndex].position;
@@ -59,7 +56,7 @@ public class FlyEnemy : MonoBehaviour
         spriteRenderer = GetComponent<SpriteRenderer>();
         if (spriteRenderer != null)
         {
-            ogColor = spriteRenderer.color; // Lưu màu gốc của sprite
+            ogColor = spriteRenderer.color; 
         }
     }
 
@@ -72,12 +69,10 @@ public class FlyEnemy : MonoBehaviour
 
         float distanceToPlayer = Vector2.Distance(transform.position, player.transform.position);
 
-        // Kiểm tra nếu player vào tầm tấn công và enemy đang chase
         if (chase && distanceToPlayer <= attackRange && Time.deltaTime - lastAttackTime >= attackCooldown && !isAttacking && !isPerformingAttack)
         {
             StartAttack();
         }
-        // Nếu không còn chase, hủy attack đang diễn ra
         else if (!chase && (isAttacking || isPerformingAttack))
         {
             EndAttack();
@@ -98,7 +93,6 @@ public class FlyEnemy : MonoBehaviour
         Flip();
         UpdateAnimationStates();
 
-        // Cập nhật health bar
         if (healthBar != null)
         {
             healthBar.value = currentHealth;
@@ -109,7 +103,6 @@ public class FlyEnemy : MonoBehaviour
     {
         if (anim != null)
         {
-            // Chỉ cập nhật trạng thái chase, attack sẽ dùng trigger
             anim.SetBool("isChasing", chase && !isAttacking && !isPerformingAttack);
         }
     }
@@ -117,40 +110,33 @@ public class FlyEnemy : MonoBehaviour
     private void StartAttack()
     {
         isAttacking = true;
-        isPerformingAttack = true; // Đảm bảo reset trạng thái
+        isPerformingAttack = true; 
         attackTarget = player.transform.position;
-        hasDealtDamage = false; // Reset trạng thái đã gây sát thương
+        hasDealtDamage = false; 
 
-        // Kích hoạt animation tấn công bằng trigger
         if (anim != null)
         {
             anim.SetTrigger("attack");
         }
     }
 
-    // Hàm này được gọi từ Animation Event tại cuối animation attack
     public void OnAttackAnimationEnd()
     {
-        // Kết thúc attack nếu đang trong trạng thái tấn công
         if (isAttacking)
         {
             EndAttack();
         }
     }
-    // Hàm này được gọi từ Animation Event
     public void RangedAttack()
     {
         isPerformingAttack = true;
-        // Cập nhật lại target để đảm bảo lao về phía player hiện tại
         attackTarget = player.transform.position;
     }
 
     private void Attack()
     {
-        // Di chuyển về phía target với tốc độ tấn công
         transform.position = Vector2.MoveTowards(transform.position, attackTarget, attackSpeed * Time.deltaTime);
 
-        // Kiểm tra nếu đã đến gần target thì kết thúc tấn công
         if (Vector2.Distance(transform.position, attackTarget) < 0.2f)
         {
             EndAttack();
@@ -161,12 +147,8 @@ public class FlyEnemy : MonoBehaviour
     {
         isAttacking = false;
         isPerformingAttack = false;
-        hasDealtDamage = false; // Đặt lại biến đã gây sát thương
-        // Cập nhật thời gian tấn công cuối cùng để cooldown hoạt động
+        hasDealtDamage = false; 
         lastAttackTime = Time.deltaTime;
-
-        // Không cần reset animation attack vì dùng trigger
-        // Animation sẽ tự động quay về idle/flying state
     }
 
     private void Patrol()
@@ -239,7 +221,6 @@ public class FlyEnemy : MonoBehaviour
             Gizmos.DrawLine(patrolPoints[patrolPoints.Length - 1].position, patrolPoints[0].position);
         }
 
-        // Vẽ tầm tấn công
         Gizmos.color = Color.red;
         Gizmos.DrawWireSphere(transform.position, attackRange);
     }

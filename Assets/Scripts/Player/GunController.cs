@@ -23,12 +23,11 @@ public class GunController : MonoBehaviour
     void Start()
     {
         shootSound = GetComponent<AudioSource>();
-        currentClip = maxClip; // Bắt đầu với băng đạn đầy
+        currentClip = maxClip; 
         bulletUI.SetMaxBullets(maxClip);
         UpdateAmmoUI();
     }
 
-    // Update is called once per frame
     void Update()
     {
         Vector2 mousePosition = Camera.main.ScreenToWorldPoint(Input.mousePosition);
@@ -45,7 +44,7 @@ public class GunController : MonoBehaviour
     {
         if (currentClip > 0)
         {
-            shootSound.Play(); // Phát âm thanh khi bắn
+            shootSound.Play(); 
             GameObject bulletIns = Instantiate(bullet, shootPoint.position, shootPoint.rotation);
             bulletIns.GetComponent<Rigidbody2D>().AddForce(bulletIns.transform.right * bulletSpeed);
             gunAnimator.SetTrigger("shoot");
@@ -81,15 +80,14 @@ public class GunController : MonoBehaviour
         currentAmmo += ammoAmount;
         if (currentAmmo > maxAmmo)
         {
-            currentAmmo = maxAmmo; // Ensure we don't exceed max ammo
+            currentAmmo = maxAmmo; 
         }
 
-        // Nếu hết băng và có đạn dự trữ, tự động thay đạn
         if (currentClip == 0 && currentAmmo > 0 && !isReloading)
         {
             StartCoroutine(ReloadCoroutine());
         }
-        UpdateAmmoUI(); // Cập nhật UI sau khi thêm đạn
+        UpdateAmmoUI();
     }
     public void FinishReload()
     {
@@ -98,19 +96,16 @@ public class GunController : MonoBehaviour
         currentClip += reloadAmount;
         currentAmmo -= reloadAmount;
         isReloading = false;
-        UpdateAmmoUI(); // Cập nhật UI sau khi thay đạn
+        UpdateAmmoUI(); 
     }
 
-    // Phương thức cập nhật UI hiển thị đạn
     void UpdateAmmoUI()
     {
-        // Cập nhật UI hiển thị số đạn trong băng
         if (bulletUI != null)
         {
             bulletUI.UpdateBullets(currentClip);
         }
         
-        // Cập nhật text hiển thị đạn dự trữ
         if (ammoText != null)
         {
             ammoText.text = "/" + currentAmmo.ToString();

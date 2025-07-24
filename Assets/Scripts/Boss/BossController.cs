@@ -2,6 +2,7 @@ using UnityEngine;
 
 public class BossController : MonoBehaviour
 {
+    [Header("References")]
     public Animator anim;
     public Transform player;
     public Transform raycastOrigin;
@@ -9,16 +10,32 @@ public class BossController : MonoBehaviour
     public ChaseAttack chaseAttack;
     public ShootFireballsAttack shootFireballs;
     public BossHealth bossHealth;
+
+    [Header("Attack Toggles")]
     public bool dashAttackOn = false;
     public bool chaseAttackOn = false;
     public bool shootFireballsOn = false;
     public bool RandomAttackLoop = false;
+
+    [Header("Attack Ranges & Durations")]
     public float randomAttackActiveRange = 8f;
+    public float dashFireComboRange = 10f;
+    public float chaseAttackDuration = 5f;
+    public float idleDuration = 1f;
+    public float fireballAttackDuration = 3f;
+    public int maxFireballShots = 3;
+
+    [Header("Movement")]
     public bool moveToA = false;
     public bool moveToB = false;
     public Transform targetA;
     public Transform targetB;
     public float moveSpeed = 3f;
+
+    [Header("Layers")]
+    public LayerMask obstacleLayerMask = ~0;
+    public LayerMask playerLayer = 1;
+
     private enum BossState1
     {
         Idle,
@@ -27,16 +44,9 @@ public class BossController : MonoBehaviour
         ChaseAttack       
     }
     private BossState1 currentState = BossState1.Idle;
-    public float idleDuration = 1f;
     public float stateTimer;
-    public float dashFireComboRange = 10f;
-    public LayerMask obstacleLayerMask = ~0;
-    public LayerMask playerLayer = 1;
-    public float chaseAttackDuration = 5f;
     private Vector3 originalScale;
-    public int maxFireballShots = 3;
     private int fireballShotsCount = 0;
-    public float fireballAttackDuration = 3f;
     private float fireballAttackTimer = 0f;
 
     private void Start()
@@ -80,7 +90,6 @@ public class BossController : MonoBehaviour
     private void Update()
     {
         if (player != null && currentState != BossState1.DashFireCombo) FacePlayer();
-        // Kích hoạt RandomAttackLoop khi player vào tầm
         if (player != null)
         {
             float dist = GetDistanceToPlayer();
@@ -92,6 +101,7 @@ public class BossController : MonoBehaviour
         stateTimer -= Time.deltaTime;
         bool isMovingToTarget = (moveToA && targetA != null) || (moveToB && targetB != null);
         if (anim != null) anim.SetBool("isChasing", isMovingToTarget);
+
         switch (currentState)
         {
             case BossState1.Idle:
@@ -111,16 +121,28 @@ public class BossController : MonoBehaviour
                 }
                 break;
             case BossState1.DashFireCombo:
+                // Dash chỉ thực hiện 1 lần, khi xong sẽ gọi OnDashFireComboComplete để về Idle
                 break;
             case BossState1.ChaseAttack:
                 if (chaseAttack != null && chaseAttack.IsPerformingChaseAttack)
                 {
                     float elapsedTime = chaseAttack.GetElapsedTime();
-                    if (elapsedTime >= chaseAttackDuration) chaseAttack.StopChaseAttack();
+                    if (elapsedTime >= chaseAttackDuration)
+                    {
+                        chaseAttack.StopChaseAttack();
+                        currentState = BossState1.Idle;
+                        stateTimer = idleDuration;
+                    }
+                }
+                else
+                {
+                    // Khi chase xong thì về Idle
+                    currentState = BossState1.Idle;
+                    stateTimer = idleDuration;
                 }
                 break;
             case BossState1.ShootFireballs:
-                fireballAttackTimer += Time.deltaTime;
+                // Chỉ thực hiện 1 lần, sau đó về Idle
                 if (fireballShotsCount < maxFireballShots)
                 {
                     if (shootFireballs != null)

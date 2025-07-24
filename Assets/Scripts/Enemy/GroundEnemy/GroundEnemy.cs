@@ -21,9 +21,9 @@ public class GroundEnemy : MonoBehaviour
 
     [Header("Attack Settings")]
 
-    private float distance; //Store the distance b/w enemy and player
+    private float distance; 
     private bool attackMode;
-    private bool cooling; //Check if Enemy is cooling after attack
+    private bool cooling; 
     private float intTimer;
     public int damage = 1;
 
@@ -40,7 +40,7 @@ public class GroundEnemy : MonoBehaviour
     void Awake()
     {
         SelectTarget();
-        intTimer = timer; //Store the inital value of timer
+        intTimer = timer; 
         anim = GetComponent<Animator>();
     }
 
@@ -48,10 +48,10 @@ public class GroundEnemy : MonoBehaviour
     {
         rb = GetComponent<Rigidbody2D>();
         currentHealth = maxHealth;
-        spriteRenderer = GetComponentInChildren<SpriteRenderer>(); // Tìm SpriteRenderer từ child objects
+        spriteRenderer = GetComponentInChildren<SpriteRenderer>(); 
         if (spriteRenderer != null)
         {
-            ogColor = spriteRenderer.color; // Lưu màu gốc của sprite
+            ogColor = spriteRenderer.color; 
         }
     }
 
@@ -188,10 +188,10 @@ public class GroundEnemy : MonoBehaviour
 
     public void TakeDamage(int damage)
     {
-        if (isDead) return; // Không nhận sát thương khi đã chết
+        if (isDead) return; 
 
         currentHealth -= damage;
-        StartCoroutine(FlashRed());
+        StartCoroutine(Flash());
         if (currentHealth <= 0)
         {
             Die();
@@ -202,12 +202,10 @@ public class GroundEnemy : MonoBehaviour
         if (isDead) return;
         isDead = true;
 
-        // Dừng tất cả các hành động
         attackMode = false;
         cooling = false;
         inRange = false;
 
-        // Dừng animation di chuyển và tấn công
         if (anim != null)
         {
             anim.SetBool("canWalk", false);
@@ -215,7 +213,6 @@ public class GroundEnemy : MonoBehaviour
             anim.SetTrigger("die");
         }
 
-        // Vô hiệu hóa các zone
         if (hotZone != null)
             hotZone.SetActive(false);
         if (triggerZone != null)
@@ -223,9 +220,9 @@ public class GroundEnemy : MonoBehaviour
     }
     public void DieAnimation()
     {
-        Destroy(gameObject, 0.1f); // Destroy the enemy after 0.1 seconds
+        Destroy(gameObject, 0.1f); 
     }
-    private IEnumerator FlashRed()
+    private IEnumerator Flash()
     {
         if (spriteRenderer != null)
         {
@@ -250,8 +247,7 @@ public class GroundEnemy : MonoBehaviour
 
         transform.eulerAngles = rotation;
         
-        //Ternary Operator
-        //rotation.y = (currentTarget.position.x < transform.position.x) ? rotation.y = 180f : rotation.y = 0f;
+        
     }
 
 }

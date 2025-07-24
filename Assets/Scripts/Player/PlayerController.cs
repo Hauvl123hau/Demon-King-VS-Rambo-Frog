@@ -67,19 +67,16 @@ public class PlayerController : MonoBehaviour
             gunController.Reload();
         }
 
-        // Quay nhân vật theo hướng chuột
         Vector3 mouseWorldPos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
         if (mouseWorldPos.x < transform.position.x)
             sprite.flipX = true;
         else
             sprite.flipX = false;
 
-        // Đổi vị trí GunHolder theo hướng nhân vật
         if (gunController != null)
         {
             Transform gunHolder = gunController.transform.parent;
 
-            // Đặt GunHolder về đúng vị trí tay (Left hoặc Right)
             if (sprite.flipX)
             {
                 gunHolder.position = gunLeftPos.position;
@@ -91,14 +88,11 @@ public class PlayerController : MonoBehaviour
                 gunController.transform.localScale = new Vector3(1, 1, 1);
             }
 
-            // Tính hướng từ súng đến chuột
             Vector2 direction = (mouseWorldPos - gunHolder.position).normalized;
             float angle = Mathf.Atan2(direction.y, direction.x) * Mathf.Rad2Deg;
 
-            // Xoay GunHolder theo hướng chuột
             gunHolder.rotation = Quaternion.Euler(0, 0, angle);
 
-            // Không cần xoay hoặc scale GunController nữa
         }
     }
 
@@ -106,13 +100,11 @@ public class PlayerController : MonoBehaviour
     {
         if (rb.linearVelocity.y < 0)
         {
-            // Apply increased gravity when falling
             rb.gravityScale = baseGravity * fallSpeedMultiplier;
             rb.linearVelocity = new Vector2(rb.linearVelocity.x, Mathf.Max(rb.linearVelocity.y, -maxFallGravity));
         }
         else
         {
-            // Reset gravity scale when not falling
             rb.gravityScale = baseGravity;
         }
     }
@@ -125,7 +117,6 @@ public class PlayerController : MonoBehaviour
     void CheckEnvironment()
     {
         isGrounded = Physics2D.OverlapCircle(groundCheck.position, groundCheckRadius, groundLayer);
-        // Reset double jump when grounded
         if (isGrounded)
             canDoubleJump = enableDoubleJump;
     }
@@ -147,7 +138,6 @@ public class PlayerController : MonoBehaviour
         {
             sprite.flipX = currentSpeed < 0;
 
-            // Hiệu ứng khói khi chạy trên mặt đất
             if (isGrounded && !smokeFX.isPlaying)
             {
                 smokeFX.Play();
@@ -155,7 +145,6 @@ public class PlayerController : MonoBehaviour
         }
         else
         {
-            // Dừng hiệu ứng khói khi không chạy
             if (smokeFX.isPlaying)
             {
                 smokeFX.Stop();
@@ -165,7 +154,6 @@ public class PlayerController : MonoBehaviour
 
     void HandleJumpInput()
     {
-        // Start jump or double jump
         if (Input.GetButtonDown("Jump"))
         {
             if (isGrounded)
@@ -179,10 +167,8 @@ public class PlayerController : MonoBehaviour
                 isJumping = true;
                 jumpTimeCounter = variableJumpTime;
                 rb.linearVelocity = new Vector2(rb.linearVelocity.x, jumpForce);
-                // animator.SetTrigger("doubleJumpTrigger");
                 canDoubleJump = false;
 
-                // Hiệu ứng khói khi double jump
                 if (smokeFX != null)
                 {
                     smokeFX.Play();
@@ -190,7 +176,6 @@ public class PlayerController : MonoBehaviour
             }
         }
 
-        // Hold for variable jump height
         if (Input.GetButton("Jump") && isJumping)
         {
             if (jumpTimeCounter > 0)

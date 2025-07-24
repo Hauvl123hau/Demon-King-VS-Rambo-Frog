@@ -20,7 +20,6 @@ public class BossHealth : MonoBehaviour
         currentHealth = maxHealth;
         spriteRenderer = GetComponentInChildren<SpriteRenderer>();
         ogColor = spriteRenderer.color;
-        // Auto-find Animator if not assigned
         anim = GetComponent<Animator>();
         if (anim == null)
         {

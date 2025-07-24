@@ -6,8 +6,8 @@ public class FlyEnemyShooting : MonoBehaviour
 {
     [SerializeField] private float speed;
     [Header("Patrol Settings")]
-    [SerializeField] private Transform[] patrolPoints; // Mảng các điểm patrol
-    [SerializeField] private int currentPatrolIndex = 0; // Chỉ số điểm hiện tại
+    [SerializeField] private Transform[] patrolPoints; 
+    [SerializeField] private int currentPatrolIndex = 0; 
 
     [Header("Shooting Settings")]
     [SerializeField] private float shootingRange = 3f;
@@ -28,14 +28,12 @@ public class FlyEnemyShooting : MonoBehaviour
     private GameObject player;
     private Animator anim;
 
-    // Biến cho patrol
     private Vector3 currentTarget;
 
     private void Awake()
     {
         anim = GetComponent<Animator>();
 
-        // Thiết lập điểm patrol đầu tiên
         if (patrolPoints.Length > 0)
         {
             currentTarget = patrolPoints[currentPatrolIndex].position;
@@ -49,13 +47,13 @@ public class FlyEnemyShooting : MonoBehaviour
         spriteRenderer = GetComponent<SpriteRenderer>();
         if (spriteRenderer != null)
         {
-            ogColor = spriteRenderer.color; // Lưu màu gốc của sprite
+            ogColor = spriteRenderer.color; 
         }
     }
 
     private void Update()
     {
-        if (isDead) return; // Không làm gì nếu enemy đã chết
+        if (isDead) return;
 
         shootingRange = Vector2.Distance(transform.position, player.transform.position);
         if (shootingRange < 10)
@@ -74,7 +72,6 @@ public class FlyEnemyShooting : MonoBehaviour
             healthBar.value = currentHealth;
         }
 
-        // Luôn patrol
         Patrol();
         Flip();
     }
@@ -88,13 +85,10 @@ public class FlyEnemyShooting : MonoBehaviour
     {
         if (patrolPoints.Length == 0) return;
 
-        // Di chuyển đến điểm mục tiêu
         transform.position = Vector2.MoveTowards(transform.position, currentTarget, speed * Time.deltaTime);
 
-        // Kiểm tra nếu đã đến điểm mục tiêu
         if (Vector2.Distance(transform.position, currentTarget) < 0.1f)
         {
-            // Chuyển sang điểm tiếp theo
             currentPatrolIndex = (currentPatrolIndex + 1) % patrolPoints.Length;
             currentTarget = patrolPoints[currentPatrolIndex].position;
         }
@@ -104,7 +98,6 @@ public class FlyEnemyShooting : MonoBehaviour
     {
         Vector3 targetPosition = currentTarget;
 
-        // Xoay mặt theo hướng di chuyển
         if (transform.position.x < targetPosition.x)
         {
             transform.rotation = Quaternion.Euler(0, 180, 0);
@@ -115,7 +108,6 @@ public class FlyEnemyShooting : MonoBehaviour
         }
     }
 
-    // Hiển thị đường đi trong Scene view
     private void OnDrawGizmosSelected()
     {
         if (patrolPoints == null || patrolPoints.Length < 2) return;
@@ -124,11 +116,9 @@ public class FlyEnemyShooting : MonoBehaviour
         {
             if (patrolPoints[i] == null) continue;
 
-            // Vẽ điểm patrol
             Gizmos.color = Color.blue;
             Gizmos.DrawWireSphere(patrolPoints[i].position, 0.3f);
 
-            // Vẽ đường nối giữa các điểm
             if (i < patrolPoints.Length - 1 && patrolPoints[i + 1] != null)
             {
                 Gizmos.color = Color.yellow;
@@ -136,16 +126,14 @@ public class FlyEnemyShooting : MonoBehaviour
             }
         }
 
-        // Vẽ đường từ điểm cuối về điểm đầu
         if (patrolPoints.Length > 2 && patrolPoints[0] != null && patrolPoints[patrolPoints.Length - 1] != null)
         {
             Gizmos.color = Color.yellow;
             Gizmos.DrawLine(patrolPoints[patrolPoints.Length - 1].position, patrolPoints[0].position);
         }
 
-        // Vẽ tầm bắn của enemy
         Gizmos.color = Color.red;
-        Gizmos.DrawWireSphere(transform.position, 10f); // Tầm bắn 10 units
+        Gizmos.DrawWireSphere(transform.position, 10f); 
     }
 
     public void TakeDamage(int damage)

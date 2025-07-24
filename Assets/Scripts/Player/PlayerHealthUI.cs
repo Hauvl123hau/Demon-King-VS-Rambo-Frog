@@ -11,14 +11,12 @@ public class PlayerHealthUI : MonoBehaviour
     private List<Image> hearts = new List<Image>();
     public void SetMaxHealth(int maxHealth)
     {
-        // Clear existing hearts
         foreach (var heart in hearts)
         {
             Destroy(heart.gameObject);
         }
         hearts.Clear();
 
-        // Create new hearts
         for (int i = 0; i < maxHealth; i++)
         {
             Image newHeart = Instantiate(heartImage, transform);

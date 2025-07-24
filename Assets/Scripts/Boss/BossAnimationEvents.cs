@@ -40,9 +40,22 @@ public class BossAnimationEvents : MonoBehaviour
     // Animation Event: Được gọi khi fire breath animation hoàn thành
     private void EndFireBreath()
     {
-        // Chỉ cần để trống vì DashAttack sẽ tự xử lý end fire breath
-        // Animation event này có thể được sử dụng để trigger effects hoặc sounds
+        // Gây sát thương lên player khi animation fire breath kết thúc
+        DealDamageToPlayer();
         Debug.Log("Animation Event: Fire breath kết thúc!");
+    }
+    // Hàm gây sát thương lên player
+    private void DealDamageToPlayer()
+    {
+        if (dashAttack != null && dashAttack.player != null)
+        {
+            PlayerHealth playerHealth = dashAttack.player.GetComponent<PlayerHealth>();
+            if (playerHealth != null)
+            {
+                playerHealth.TakeDamage(1); // Số damage boss gây ra, có thể chỉnh sửa
+                Debug.Log("Boss gây sát thương lên player!");
+            }
+        }
     }
 
     private void ShootFireball()

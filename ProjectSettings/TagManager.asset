@@ -22,7 +22,7 @@ TagManager:
   - Player
   - Boss
   - Oneway
-  - 
+  - Mouse
   - 
   - 
   - 
@@ -73,6 +73,9 @@ TagManager:
     locked: 0
   - name: Trap
     uniqueID: 3608363051
+    locked: 0
+  - name: Mouse
+    uniqueID: 2110089047
     locked: 0
   m_RenderingLayers:
   - Default

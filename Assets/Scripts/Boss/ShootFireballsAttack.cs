@@ -22,7 +22,6 @@ public class ShootFireballsAttack : MonoBehaviour
             bossController = GetComponentInParent<BossController>();
         }
 
-        // Auto-find Animator if not assigned
         if (anim == null)
         {
             anim = GetComponent<Animator>();
@@ -38,11 +37,9 @@ public class ShootFireballsAttack : MonoBehaviour
         }
     }
 
-    // Không tự động bắn nữa, BossController sẽ gọi ShootFireball khi cần
 
     public void ShootFireball()
     {
-        // Trigger animation
         if (anim != null)
         {
             anim.SetBool("isShooting", true);
@@ -58,6 +55,5 @@ public class ShootFireballsAttack : MonoBehaviour
         {
             rb.linearVelocity = direction * fireballSpeed;
         }
-        Debug.Log("Boss bắn fireball về phía người chơi!");
     }
 }
