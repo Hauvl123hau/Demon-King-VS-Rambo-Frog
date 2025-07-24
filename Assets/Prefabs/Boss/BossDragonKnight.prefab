@@ -164,7 +164,7 @@ MonoBehaviour:
   dashAttack: {fileID: 1337278770286627758}
   chaseAttack: {fileID: 1637989403406071133}
   shootFireballs: {fileID: 5349527856788551615}
-  bossHealth: {fileID: 0}
+  bossHealth: {fileID: 6546094857245659982}
   dashAttackOn: 0
   chaseAttackOn: 0
   shootFireballsOn: 0
