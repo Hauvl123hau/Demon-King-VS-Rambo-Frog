@@ -12,7 +12,8 @@ public class BossController : MonoBehaviour
     public bool dashAttackOn = false;
     public bool chaseAttackOn = false;
     public bool shootFireballsOn = false;
-    public bool RandomAttackLoop = true;
+    public bool RandomAttackLoop = false;
+    public float randomAttackActiveRange = 8f;
     public bool moveToA = false;
     public bool moveToB = false;
     public Transform targetA;
@@ -79,6 +80,12 @@ public class BossController : MonoBehaviour
     private void Update()
     {
         if (player != null && currentState != BossState1.DashFireCombo) FacePlayer();
+        // Kích hoạt RandomAttackLoop khi player vào tầm
+        if (player != null)
+        {
+            float dist = GetDistanceToPlayer();
+            RandomAttackLoop = dist <= randomAttackActiveRange;
+        }
         bool isDashAttacking = dashAttackOn && dashAttack != null && dashAttack.IsPerformingCombo;
         bool isChaseAttacking = chaseAttackOn && chaseAttack != null && chaseAttack.IsPerformingChaseAttack;
         if (isDashAttacking || isChaseAttacking) return;
@@ -199,11 +206,31 @@ public class BossController : MonoBehaviour
     private void OnDrawGizmosSelected()
     {
         if (raycastOrigin == null) return;
-        if (chaseAttackOn && chaseAttack != null) Gizmos.DrawWireSphere(raycastOrigin.position, chaseAttack.meleeAttackRange);
-        if (dashAttackOn) Gizmos.DrawWireSphere(raycastOrigin.position, dashFireComboRange);
+        // Vẽ vùng random attack
+        Gizmos.color = Color.yellow;
+        Gizmos.DrawWireSphere(raycastOrigin.position, randomAttackActiveRange);
+
+        // Vẽ vùng dashFireComboRange
+        if (dashAttackOn)
+        {
+            Gizmos.color = Color.red;
+            Gizmos.DrawWireSphere(raycastOrigin.position, dashFireComboRange);
+        }
+
+        // Vẽ vùng chaseAttack
+        if (chaseAttackOn && chaseAttack != null)
+        {
+            Gizmos.color = Color.green;
+            Gizmos.DrawWireSphere(raycastOrigin.position, chaseAttack.meleeAttackRange);
+        }
+
+        // Vẽ đường thẳng tới player
         if (player != null)
         {
+            Gizmos.color = Color.white;
             Gizmos.DrawLine(raycastOrigin.position, player.position);
+            // Vẽ vị trí boss
+            Gizmos.color = Color.blue;
             Gizmos.DrawWireSphere(raycastOrigin.position, 0.2f);
         }
     }
