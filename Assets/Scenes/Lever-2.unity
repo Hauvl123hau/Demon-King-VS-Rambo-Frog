@@ -167,8 +167,24 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: -0.546
       objectReference: {fileID: 0}
+    - target: {fileID: 2599418987743149839, guid: 5e0ffd56eae1b2944ac51c5bb46621c6, type: 3}
+      propertyPath: m_SortingLayer
+      value: 5
+      objectReference: {fileID: 0}
+    - target: {fileID: 2599418987743149839, guid: 5e0ffd56eae1b2944ac51c5bb46621c6, type: 3}
+      propertyPath: m_SortingLayerID
+      value: 504004951
+      objectReference: {fileID: 0}
+    - target: {fileID: 4073698699698431753, guid: 5e0ffd56eae1b2944ac51c5bb46621c6, type: 3}
+      propertyPath: m_AnchorMax.x
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 4073698699698431753, guid: 5e0ffd56eae1b2944ac51c5bb46621c6, type: 3}
       propertyPath: m_AnchorMax.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6180549661195518336, guid: 5e0ffd56eae1b2944ac51c5bb46621c6, type: 3}
+      propertyPath: m_Value
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 7034780916014081518, guid: 5e0ffd56eae1b2944ac51c5bb46621c6, type: 3}
@@ -4471,6 +4487,10 @@ PrefabInstance:
     - target: {fileID: 90891143681824297, guid: c65cd97344ac125488eac7cb11f84d2d, type: 3}
       propertyPath: m_Name
       value: Bat
+      objectReference: {fileID: 0}
+    - target: {fileID: 735168715067060201, guid: c65cd97344ac125488eac7cb11f84d2d, type: 3}
+      propertyPath: attackRange
+      value: 5.7
       objectReference: {fileID: 0}
     - target: {fileID: 735168715067060201, guid: c65cd97344ac125488eac7cb11f84d2d, type: 3}
       propertyPath: patrolPoints.Array.size
