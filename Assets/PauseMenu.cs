@@ -8,21 +8,21 @@ public class PauseMenu : MonoBehaviour
     public void PauseGame()
     {
         pauseMenu.SetActive(true);
-        Time.timeScale = 0; // Pause the game
+        Time.timeScale = 0;
     }
     public void Home()
     {
         SceneManager.LoadScene("MainMenu");
-        Time.timeScale = 1; // Resume the game
+        Time.timeScale = 1;
     }
     public void Exit()
     {
         pauseMenu.SetActive(false);
-        Time.timeScale = 1; // Resume the game
+        Time.timeScale = 1;
     }
     public void Restart()
     {
         SceneManager.LoadScene("Lever-1");
-        Time.timeScale = 1; // Resume the game
+        Time.timeScale = 1;
     }
 }

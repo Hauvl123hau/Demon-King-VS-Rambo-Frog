@@ -2,7 +2,7 @@ using UnityEngine;
 
 public class HealthItem : MonoBehaviour
 {
-    public int healAmount = 1; // Amount of health to restore when collected
+    public int healAmount = 1;
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
@@ -12,7 +12,7 @@ public class HealthItem : MonoBehaviour
             if (playerHealth)
             {
                 playerHealth.Heal(healAmount);
-                Destroy(gameObject); // Destroy the health item after collection
+                Destroy(gameObject);
             }
         }
     }

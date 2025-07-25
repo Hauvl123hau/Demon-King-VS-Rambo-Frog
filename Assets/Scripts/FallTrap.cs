@@ -5,7 +5,7 @@ public class FallTrap : MonoBehaviour
     private Rigidbody2D rb;
     private bool daroi = false;
     public Transform diemkhoiphuc;
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
+    
     void Start()
     {
         rb = GetComponent<Rigidbody2D>();
@@ -16,21 +16,21 @@ public class FallTrap : MonoBehaviour
         {
             rb.bodyType = RigidbodyType2D.Dynamic;
             daroi = true;
-            Invoke("khoiphuc", 2f); // Call khoiphuc after 2 seconds
+            Invoke("khoiphuc", 2f);
         }
     }private void OnCollisionEnter2D(Collision2D collision)
     {
         if (collision.gameObject.CompareTag("Player"))
         {
-            // Hiển thị UI tử vong khi người chơi bị bẫy rơi đè
+            
             DeadUI deadUI = FindObjectOfType<DeadUI>();
             if (deadUI != null)
             {
-                deadUI.ShowDeadPanelWithMessage("Bị nghiền nát bởi bẫy!");
+                deadUI.ShowDeadPanelWithMessage("Bị nghiền nát bởi bẫy !");
             }
             else
             {
-                // Quay lại tải trực tiếp cảnh nếu không tìm thấy DeadUI
+               
                 SceneManager.LoadScene("Lever-1");
             }
         }
@@ -40,7 +40,7 @@ public class FallTrap : MonoBehaviour
         rb.linearVelocity = Vector2.zero;
         rb.angularVelocity = 0;
         transform.position = diemkhoiphuc.position;
-        // Reset the rotation to the original state
+        
         daroi = false;
     }
 }

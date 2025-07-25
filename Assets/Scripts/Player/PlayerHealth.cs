@@ -19,7 +19,6 @@ public class PlayerHealth : MonoBehaviour
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
-        // Chỉ nhận damage từ attack hitbox, không phải từ enemy body
         if (collision.CompareTag("EnemyAttack"))
         {
             GroundEnemy enemy = collision.GetComponentInParent<GroundEnemy>();
@@ -60,7 +59,6 @@ public class PlayerHealth : MonoBehaviour
 
     private void Die()
     {
-        // Tìm thành phần DeadUI và hiển thị panel tử vong
         DeadUI deadUI = FindObjectOfType<DeadUI>();
         if (deadUI != null)
         {
@@ -71,7 +69,6 @@ public class PlayerHealth : MonoBehaviour
             Debug.LogError("Không tìm thấy thành phần DeadUI trong cảnh!");
         }
         
-        // Vô hiệu hóa điều khiển người chơi hoặc hoạt ảnh nếu cần
         Rigidbody2D rb = GetComponent<Rigidbody2D>();
         if (rb != null)
         {

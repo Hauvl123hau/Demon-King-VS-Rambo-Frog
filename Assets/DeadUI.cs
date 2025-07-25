@@ -5,13 +5,11 @@ using TMPro;
 
 public class DeadUI : MonoBehaviour
 {
-    [SerializeField] private GameObject deadPanel;  // Kéo GameObject DeadPanel vào đây trong Inspector
-    [SerializeField] private TextMeshProUGUI deathMessageText; // Tham chiếu đến thành phần TextMeshPro cho thông báo tử vong
+    [SerializeField] private GameObject deadPanel;
+    [SerializeField] private TextMeshProUGUI deathMessageText;
     
-    // Start được gọi một lần trước khi Update thực thi lần đầu tiên sau khi MonoBehaviour được tạo
     void Start()
     {
-        // Đảm bảo panel tử vong bị ẩn khi bắt đầu
         if (deadPanel != null)
         {
             deadPanel.SetActive(false);
@@ -22,31 +20,27 @@ public class DeadUI : MonoBehaviour
         }
     }
     
-    // Hiển thị panel tử vong
     public void ShowDeadPanel()
     {
         if (deadPanel != null)
         {
             deadPanel.SetActive(true);
-            Time.timeScale = 0; // Tạm dừng trò chơi
+            Time.timeScale = 0;
             
-            // Đặt thông báo tử vong mặc định
             if (deathMessageText != null)
             {
-                deathMessageText.text = "Bạn đã chết!";
+                deathMessageText.text = "You are Dead!";
             }
         }
     }
     
-    // Hiển thị panel tử vong với thông báo tùy chỉnh
     public void ShowDeadPanelWithMessage(string message)
     {
         if (deadPanel != null)
         {
             deadPanel.SetActive(true);
-            Time.timeScale = 0; // Tạm dừng trò chơi
+            Time.timeScale = 0;
             
-            // Đặt thông báo tử vong tùy chỉnh nếu thành phần văn bản tồn tại
             if (deathMessageText != null)
             {
                 deathMessageText.text = message;
@@ -54,23 +48,18 @@ public class DeadUI : MonoBehaviour
         }
     }
     
-    // Các chức năng nút cho Panel tử vong
-    
-    // Khởi động lại màn chơi hiện tại
     public void Restart()
     {
         SceneManager.LoadScene("Lever-1");
-        Time.timeScale = 1; // Tiếp tục trò chơi
+        Time.timeScale = 1;
     }
     
-    // Quay lại menu chính
     public void MainMenu()
     {
         SceneManager.LoadScene("MainMenu");
-        Time.timeScale = 1; // Tiếp tục trò chơi
+        Time.timeScale = 1;
     }
     
-    // Thoát trò chơi
     public void QuitGame()
     {
         Debug.Log("Đang thoát trò chơi");
