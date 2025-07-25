@@ -35,6 +35,16 @@ public class PlayerHealth : MonoBehaviour
         }
     }
 
+    public void Heal(int amount)
+    {
+        currentHealth += amount;
+        if (currentHealth > maxHealth)
+        {
+            currentHealth = maxHealth;
+        }
+        healthUI.UpdateHeart(currentHealth);
+    }
+
     public void TakeDamage(int damage)
     {
         currentHealth -= damage;
